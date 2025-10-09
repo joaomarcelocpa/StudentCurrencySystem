@@ -15,6 +15,10 @@ O StudentCurrencySystem é uma plataforma que implementa um sistema de economia 
 ### Diagrama de Componentes
 ![Diagrama de Componentes](Documentação/Diagrama%20de%20Componentes.png)
 
+### Histórias de Usuário
+ [`Histórias de Usuário.pdf`](Documentação/Histórias%20de%Usuário.pdf)
+
+
 ## 👥 Equipe
 Projeto desenvolvido pelos alunos:
 - Bernardo de Resende Marcelino
