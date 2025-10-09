@@ -10,7 +10,7 @@ O StudentCurrencySystem é uma plataforma que implementa um sistema de economia 
 [📄 Ver PDF](Documentação/Diagrama%20de%20Casos%20de%20Uso.pdf)
 
 ### Diagrama de Classes
-![Diagrama de Classes](Documentação/Diagrama%20de%Classes.png)
+![Diagrama de Classes](Documentação/diagrama_classes_moeda_uni.png.png)
 
 ### Diagrama de Componentes
 ![Diagrama de Componentes](Documentação/Diagrama%20de%20Componentes.png)
