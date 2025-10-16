@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mvn clean compile:*)",
+      "Bash(\"./mvnw\" clean compile)",
+      "Bash(\"./mvnw\" spring-boot:run)",
+      "Bash(timeout 30 bash -c \"cd backend/virtus && ''./mvnw'' spring-boot:run 2>&1 | tail -50\")",
+      "Bash(cat:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
