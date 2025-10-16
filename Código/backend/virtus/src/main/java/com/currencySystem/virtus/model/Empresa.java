@@ -28,6 +28,9 @@ public class Empresa extends Usuario {
     @Column(length = 500)
     private String email;
 
+    @Column(nullable = false)
+    private Boolean ativa = true;  // ✅ ADICIONE ESTA LINHA
+
     @JsonIgnore
     @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Vantagem> vantagens = new ArrayList<>();
@@ -40,6 +43,7 @@ public class Empresa extends Usuario {
         this.cnpj = cnpj;
         this.endereco = endereco;
         this.email = email;
+        this.ativa = true;  // ✅ ADICIONE ESTA LINHA
         this.setAtivo(true);
     }
 

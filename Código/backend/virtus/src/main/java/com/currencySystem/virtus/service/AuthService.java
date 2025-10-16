@@ -4,6 +4,7 @@ import com.currencySystem.virtus.dto.AuthResponse;
 import com.currencySystem.virtus.dto.LoginRequest;
 import com.currencySystem.virtus.model.Aluno;
 import com.currencySystem.virtus.model.Professor;
+import com.currencySystem.virtus.model.Empresa;
 import com.currencySystem.virtus.model.Usuario;
 import com.currencySystem.virtus.repository.UsuarioRepository;
 import com.currencySystem.virtus.security.JwtService;
@@ -43,6 +44,8 @@ public class AuthService {
             nome = ((Aluno) usuario).getNome();
         } else if (usuario instanceof Professor) {
             nome = ((Professor) usuario).getNome();
+        } else if (usuario instanceof Empresa) {  // ✅ ADICIONE ESTA LINHA
+            nome = ((Empresa) usuario).getNome();
         }
 
         return new AuthResponse(
