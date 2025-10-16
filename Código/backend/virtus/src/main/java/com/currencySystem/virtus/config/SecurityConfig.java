@@ -44,11 +44,12 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/alunos/cadastro").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/professores/cadastro").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/empresas/cadastro").permitAll()
 
                         .requestMatchers("/api/alunos/**").hasRole("ALUNO")
 
                         .requestMatchers("/api/professores/**").hasRole("PROFESSOR")
-
+                        .requestMatchers("/api/empresas/**").hasRole("EMPRESA")
                         .requestMatchers("/api/vantagens/**").authenticated()
 
                         .anyRequest().authenticated()

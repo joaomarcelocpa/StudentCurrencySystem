@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 public class EmpresaResponse {
 
     private Long id;
+    private String login;
     private String nome;
     private String cnpj;
     private String endereco;
@@ -19,11 +20,12 @@ public class EmpresaResponse {
 
     public EmpresaResponse(Empresa empresa) {
         this.id = empresa.getId();
+        this.login = empresa.getLogin();
         this.nome = empresa.getNome();
         this.cnpj = empresa.getCnpj();
         this.endereco = empresa.getEndereco();
         this.email = empresa.getEmail();
-        this.ativa = empresa.getAtiva();
+        this.ativa = empresa.getAtivo();
     }
 
     public static EmpresaResponse fromEntity(Empresa empresa) {

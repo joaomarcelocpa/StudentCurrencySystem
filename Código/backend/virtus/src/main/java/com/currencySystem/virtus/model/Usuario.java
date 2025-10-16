@@ -37,7 +37,7 @@ public abstract class Usuario implements UserDetails {
     private Boolean ativo = true;
 
     public enum TipoUsuario {
-        ALUNO, PROFESSOR
+        ALUNO, PROFESSOR, EMPRESA
     }
 
     @Override

@@ -10,13 +10,11 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "empresas")
-public class Empresa {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@PrimaryKeyJoinColumn(name = "usuario_id")
+public class Empresa extends Usuario {
 
     @Column(nullable = false, length = 200)
     private String nome;
@@ -34,6 +32,23 @@ public class Empresa {
     @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Vantagem> vantagens = new ArrayList<>();
 
-    @Column(nullable = false)
-    private Boolean ativa = true;
+    public Empresa(String login, String senha, String nome, String cnpj, String endereco, String email) {
+        this.setLogin(login);
+        this.setSenha(senha);
+        this.setTipo(TipoUsuario.EMPRESA);
+        this.nome = nome;
+        this.cnpj = cnpj;
+        this.endereco = endereco;
+        this.email = email;
+        this.setAtivo(true);
+    }
+
+    @Override
+    public void autenticar() {
+        // Lógica de autenticação específica da empresa
+    }
+
+    public void notificarEmail(String mensagem) {
+        System.out.println("Email enviado para " + this.email + ": " + mensagem);
+    }
 }
