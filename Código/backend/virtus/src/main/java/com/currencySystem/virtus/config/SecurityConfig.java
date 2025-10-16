@@ -41,21 +41,16 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        // Endpoints públicos
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/alunos/cadastro").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/professores/cadastro").permitAll()
 
-                        // Endpoints protegidos para Alunos
                         .requestMatchers("/api/alunos/**").hasRole("ALUNO")
 
-                        // Endpoints protegidos para Professores
                         .requestMatchers("/api/professores/**").hasRole("PROFESSOR")
 
-                        // Endpoints que ambos podem acessar
                         .requestMatchers("/api/vantagens/**").authenticated()
 
-                        // Qualquer outra requisição precisa estar autenticada
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

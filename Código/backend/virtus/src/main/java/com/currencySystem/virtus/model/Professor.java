@@ -26,7 +26,7 @@ public class Professor extends Usuario {
     private String departamento;
 
     @Column(nullable = false)
-    private Integer saldoMoedas = 1000; // Saldo inicial por semestre
+    private Integer saldoMoedas = 1000; 
 
     @JsonIgnore
     @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -49,21 +49,11 @@ public class Professor extends Usuario {
         // Pode incluir validações adicionais, logs, etc.
     }
 
-    /**
-     * Consulta o extrato de transações do professor
-     * @return Lista de transações enviadas
-     */
     public List<Transacao> consultarExtrato() {
         return new ArrayList<>(this.transacoesEnviadas);
     }
 
-    /**
-     * Envia moedas para um aluno
-     * @param aluno Aluno que receberá as moedas
-     * @param valor Quantidade de moedas a enviar
-     * @param motivo Motivo do envio
-     * @return Transacao criada ou null se não houver saldo suficiente
-     */
+
     public Transacao enviarMoedas(Aluno aluno, Integer valor, String motivo) {
         if (valor <= 0) {
             throw new IllegalArgumentException("O valor deve ser maior que zero");
@@ -73,13 +63,10 @@ public class Professor extends Usuario {
             throw new IllegalStateException("Saldo insuficiente para realizar a transação");
         }
 
-        // Deduz moedas do professor
         this.saldoMoedas -= valor;
 
-        // Adiciona moedas ao aluno
         aluno.adicionarMoedas(valor);
 
-        // Cria a transação
         Transacao transacao = new Transacao();
         transacao.setProfessor(this);
         transacao.setAluno(aluno);
@@ -89,35 +76,22 @@ public class Professor extends Usuario {
         this.transacoesEnviadas.add(transacao);
         aluno.getTransacoesRecebidas().add(transacao);
 
-        // Notifica o aluno
         aluno.notificarEmail("Você recebeu " + valor + " moedas do professor " +
                             this.nome + ". Motivo: " + motivo);
 
         return transacao;
     }
 
-    /**
-     * Credita moedas semestrais ao professor
-     * @param valor Quantidade de moedas a creditar
-     */
     public void creditarMoedasSemestral(Integer valor) {
         if (valor > 0) {
             this.saldoMoedas += valor;
         }
     }
 
-    /**
-     * Reseta o saldo para o valor padrão do semestre
-     */
     public void resetarSaldoSemestral() {
         this.saldoMoedas = 1000;
     }
 
-    /**
-     * Verifica se o professor tem saldo suficiente
-     * @param valor Valor a verificar
-     * @return true se tem saldo suficiente, false caso contrário
-     */
     public boolean temSaldoSuficiente(Integer valor) {
         return this.saldoMoedas >= valor;
     }

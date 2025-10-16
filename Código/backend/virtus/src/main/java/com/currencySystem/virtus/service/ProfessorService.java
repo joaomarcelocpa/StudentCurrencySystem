@@ -26,7 +26,6 @@ public class ProfessorService {
 
     @Transactional
     public ProfessorResponse cadastrar(ProfessorRequest request) {
-        // Valida se já existe professor com mesmo login ou CPF
         if (professorRepository.existsByLogin(request.getLogin())) {
             throw new IllegalArgumentException("Login já cadastrado");
         }
@@ -34,7 +33,6 @@ public class ProfessorService {
             throw new IllegalArgumentException("CPF já cadastrado");
         }
 
-        // Cria o professor
         Professor professor = new Professor(
                 request.getLogin(),
                 passwordEncoder.encode(request.getSenha()),
@@ -66,7 +64,7 @@ public class ProfessorService {
 
     @Transactional(readOnly = true)
     public List<TransacaoResponse> consultarExtrato(Long professorId) {
-        buscarPorId(professorId); // Valida se o professor existe
+        buscarPorId(professorId);
         return transacaoRepository.findByProfessorIdOrderByDataHoraDesc(professorId)
                 .stream()
                 .map(TransacaoResponse::fromEntity)
@@ -79,20 +77,16 @@ public class ProfessorService {
         Aluno aluno = alunoRepository.findById(alunoId)
                 .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado"));
 
-        // Valida o valor
         if (valor <= 0) {
             throw new IllegalArgumentException("Valor deve ser maior que zero");
         }
 
-        // Valida o saldo do professor
         if (!professor.temSaldoSuficiente(valor)) {
             throw new IllegalStateException("Saldo insuficiente");
         }
 
-        // Realiza a transferência
         Transacao transacao = professor.enviarMoedas(aluno, valor, motivo);
 
-        // Salva as alterações
         professorRepository.save(professor);
         alunoRepository.save(aluno);
         Transacao savedTransacao = transacaoRepository.save(transacao);
@@ -129,7 +123,6 @@ public class ProfessorService {
     public ProfessorResponse atualizar(Long id, ProfessorUpdateRequest request) {
         Professor professor = buscarPorId(id);
 
-        // Atualiza os campos permitidos
         professor.setNome(request.getNome());
         professor.setDepartamento(request.getDepartamento());
 

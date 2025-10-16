@@ -57,33 +57,20 @@ public class Aluno extends Usuario {
 
     @Override
     public void autenticar() {
-        // Lógica de autenticação específica do aluno
-        // Pode incluir validações adicionais, logs, etc.
     }
 
-    /**
-     * Notifica o aluno por email
-     * @param mensagem Mensagem a ser enviada
-     */
+
     public void notificarEmail(String mensagem) {
         // Implementação do envio de email seria feita aqui
         // Por enquanto, apenas um placeholder
         System.out.println("Email enviado para " + this.email + ": " + mensagem);
     }
 
-    /**
-     * Consulta o extrato de transações do aluno
-     * @return Lista de transações recebidas
-     */
+
     public List<Transacao> consultarExtrato() {
         return new ArrayList<>(this.transacoesRecebidas);
     }
 
-    /**
-     * Troca moedas por uma vantagem
-     * @param vantagem Vantagem a ser resgatada
-     * @return true se a troca foi bem-sucedida, false caso contrário
-     */
     public boolean trocarMoedas(Vantagem vantagem) {
         if (this.saldoMoedas >= vantagem.getCustoMoedas()) {
             this.saldoMoedas -= vantagem.getCustoMoedas();
@@ -92,21 +79,12 @@ public class Aluno extends Usuario {
         return false;
     }
 
-    /**
-     * Adiciona moedas ao saldo do aluno
-     * @param valor Quantidade de moedas a adicionar
-     */
     public void adicionarMoedas(Integer valor) {
         if (valor > 0) {
             this.saldoMoedas += valor;
         }
     }
 
-    /**
-     * Remove moedas do saldo do aluno
-     * @param valor Quantidade de moedas a remover
-     * @return true se a remoção foi bem-sucedida, false caso contrário
-     */
     public boolean removerMoedas(Integer valor) {
         if (valor > 0 && this.saldoMoedas >= valor) {
             this.saldoMoedas -= valor;

@@ -15,6 +15,12 @@ public class AuthController {
 
     private final AuthService authService;
 
+    /**
+     * POST /api/auth/login
+     * Realiza login do usuário no sistema
+     * @param request Dados de login (email e senha)
+     * @return Token JWT e informações do usuário autenticado
+     */
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         AuthResponse response = authService.login(request);

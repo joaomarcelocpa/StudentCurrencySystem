@@ -26,7 +26,6 @@ public class AuthService {
 
     @Transactional
     public AuthResponse login(LoginRequest request) {
-        // Autentica o usuário
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getLogin(),
@@ -37,10 +36,8 @@ public class AuthService {
         Usuario usuario = (Usuario) authentication.getPrincipal();
         usuario.autenticar();
 
-        // Gera o token JWT
         String token = jwtService.generateToken(usuario);
 
-        // Obtém o nome do usuário
         String nome = "";
         if (usuario instanceof Aluno) {
             nome = ((Aluno) usuario).getNome();

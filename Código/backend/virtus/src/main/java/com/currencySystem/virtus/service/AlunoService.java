@@ -30,7 +30,6 @@ public class AlunoService {
 
     @Transactional
     public AlunoResponse cadastrar(AlunoRequest request) {
-        // Valida se já existe aluno com mesmo login, email ou CPF
         if (alunoRepository.existsByLogin(request.getLogin())) {
             throw new IllegalArgumentException("Login já cadastrado");
         }
@@ -41,7 +40,6 @@ public class AlunoService {
             throw new IllegalArgumentException("CPF já cadastrado");
         }
 
-        // Cria o aluno
         Aluno aluno = new Aluno(
                 request.getLogin(),
                 passwordEncoder.encode(request.getSenha()),
@@ -88,22 +86,18 @@ public class AlunoService {
         Vantagem vantagem = vantagemRepository.findById(vantagemId)
                 .orElseThrow(() -> new IllegalArgumentException("Vantagem não encontrada"));
 
-        // Valida se a vantagem está ativa
         if (!vantagem.isDisponivel()) {
             throw new IllegalStateException("Vantagem não está disponível");
         }
 
-        // Valida saldo
         if (aluno.getSaldoMoedas() < vantagem.getCustoMoedas()) {
             throw new IllegalStateException("Saldo insuficiente");
         }
 
-        // Realiza a troca
         if (!aluno.trocarMoedas(vantagem)) {
             throw new IllegalStateException("Erro ao realizar a troca de moedas");
         }
 
-        // Cria o resgate
         ResgateVantagem resgate = new ResgateVantagem();
         resgate.setAluno(aluno);
         resgate.setVantagem(vantagem);
@@ -111,11 +105,9 @@ public class AlunoService {
         resgate.setDataResgate(LocalDateTime.now());
         resgate.setUtilizado(false);
 
-        // Salva as alterações
         alunoRepository.save(aluno);
         resgateVantagemRepository.save(resgate);
 
-        // Notifica o aluno
         aluno.notificarEmail("Você resgatou a vantagem: " + vantagem.getNome() +
                             ". Código de resgate: " + resgate.getCodigoResgate());
 
@@ -124,7 +116,7 @@ public class AlunoService {
 
     @Transactional(readOnly = true)
     public List<ResgateVantagemResponse> listarResgates(Long alunoId) {
-        buscarPorId(alunoId); // Valida se o aluno existe
+        buscarPorId(alunoId); 
         return resgateVantagemRepository.findByAlunoIdOrderByDataResgateDesc(alunoId)
                 .stream()
                 .map(ResgateVantagemResponse::fromEntity)
@@ -141,7 +133,6 @@ public class AlunoService {
     public AlunoResponse atualizar(Long id, AlunoUpdateRequest request) {
         Aluno aluno = buscarPorId(id);
 
-        // Atualiza os campos permitidos
         aluno.setNome(request.getNome());
         aluno.setEmail(request.getEmail());
         aluno.setEndereco(request.getEndereco());

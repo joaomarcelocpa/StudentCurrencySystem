@@ -31,9 +31,6 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    /**
-     * Extrai uma claim específica do token
-     */
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
@@ -86,16 +83,10 @@ public class JwtService {
         return extractExpiration(token).before(new Date());
     }
 
-    /**
-     * Extrai a data de expiração do token
-     */
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    /**
-     * Extrai todas as claims do token
-     */
     private Claims extractAllClaims(String token) {
         return Jwts
                 .parser()
@@ -105,9 +96,6 @@ public class JwtService {
                 .getBody();
     }
 
-    /**
-     * Obtém a chave de assinatura
-     */
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);

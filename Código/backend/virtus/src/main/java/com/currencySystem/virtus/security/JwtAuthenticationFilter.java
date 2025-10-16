@@ -33,21 +33,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
         final String userLogin;
 
-        // Verifica se o header Authorization existe e começa com "Bearer "
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // Extrai o token
         jwt = authHeader.substring(7);
         userLogin = jwtService.extractUsername(jwt);
 
-        // Se o username foi extraído e não há autenticação no contexto
         if (userLogin != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userLogin);
 
-            // Valida o token
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
