@@ -18,8 +18,14 @@ O StudentCurrencySystem é uma plataforma que implementa um sistema de economia 
 ### Diagrama de Entidade e Relacionamento
 ![Diagrama de Entidade e Relacionamento](Documentação/Diagrama%20de%20Entidade%20e%20Relacionamento.jpeg)
 
+### Diagrama do Modelo Relacional
+![Diagrama do Modelo Relacional](Documentação/Diagrama%20do%20Modelo%20Relacional.png)
+
 ### Histórias de Usuário
  [`Histórias de Usuário.pdf`](Documentação/Histórias%20de%20Usuário.pdf)
+
+### Script do Banco de Dados PostgreSQL
+[`script-postgresql.pdf`](Documentação/script-postgresql.sql)
 
 
 ## 👥 Equipe
