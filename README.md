@@ -1,31 +1,32 @@
-# *Virtus*
-Sistema de moeda estudantil desenvolvido no Laboratório de Desenvolvimento de Software, que permite a gestão de moedas de bonificação virtuais entre alunos e professores em ambiente acadêmico.
+# <img src="Documentação/Imagens/logo-virtus.png" alt="Virtus Logo" height="200"/>
 
 ## 📋 Descrição
-O Virtus é uma plataforma que implementa um sistema de economia interna para instituições de ensino, onde professores podem distribuir moedas virtuais aos alunos como recompensa por participação, desempenho acadêmico e outras atividades. Os alunos podem acumular e trocar essas moedas por benefícios e vantagens oferecidas pela instituição ou empresas parceiras.
+Sistema de moeda estudantil desenvolvido no Laboratório de Desenvolvimento de Software, que permite a gestão de moedas de bonificação virtuais entre alunos e professores em ambiente acadêmico.
+
+Virtus  implementa um sistema de economia interna para instituições de ensino, onde professores podem distribuir moedas virtuais aos alunos como recompensa por participação, desempenho acadêmico e outras atividades. Os alunos podem acumular e trocar essas moedas por benefícios e vantagens oferecidas pela instituição ou empresas parceiras. 
 
 ## 📚 Documentação
 
 ### Diagrama de Casos de Uso
-![Diagrama de Casos de Uso](Documentação/Diagrama%20de%20Casos%20de%20Uso.jpeg)
+![Diagrama de Casos de Uso](Documentação/Diagramas/Diagrama%20de%20Casos%20de%20Uso.jpeg)
 
 ### Diagrama de Classes
-![Diagrama de Classes](Documentação/Diagrama%20de%20Classes.png)
+![Diagrama de Classes](Documentação/Diagramas/Diagrama%20de%20Classes.png)
 
 ### Diagrama de Componentes
-![Diagrama de Componentes](Documentação/Diagrama%20de%20Componentes.png)
+![Diagrama de Componentes](Documentação/Diagramas/Diagrama%20de%20Componentes.png)
 
 ### Diagrama de Entidade e Relacionamento
-![Diagrama de Entidade e Relacionamento](Documentação/Diagrama%20de%20Entidade%20e%20Relacionamento.jpeg)
+![Diagrama de Entidade e Relacionamento](Documentação/Diagramas/Diagrama%20de%20Entidade%20e%20Relacionamento.jpeg)
 
 ### Diagrama do Modelo Relacional
-![Diagrama do Modelo Relacional](Documentação/Diagrama%20do%20Modelo%20Relacional.png)
+![Diagrama do Modelo Relacional](Documentação/Diagramas/Diagrama%20do%20Modelo%20Relacional.png)
 
 ### Histórias de Usuário
  [`Histórias de Usuário.pdf`](Documentação/Histórias%20de%20Usuário.pdf)
 
 ### Script do Banco de Dados PostgreSQL
-[`script-postgresql.pdf`](Documentação/script-postgresql.sql)
+[`script-postgresql.pdf`](Documentação/Scripts/script-postgresql.sql)
 
 
 ## 🏗️ Arquitetura do Sistema
@@ -44,11 +45,11 @@ No front-end, foi utilizado o **App Router do Next.js**, que permite uma estrutu
 
 ## 🧩 Tecnologias Utilizadas
 
-| Logo | Tecnologia | Descrição |
-|------|-------------|-----------|
-| <img src="Documentação/images/spring.png" alt="Spring Boot" height="40"/> | **Spring Boot** | Framework Java utilizado no back-end, responsável pela API REST, autenticação e integração com o banco de dados. |
-| <img src="Documentação/images/nextjs.png" alt="Next.js" height="40"/> | **Next.js** | Framework React moderno usado no front-end, oferecendo renderização híbrida e excelente experiência do usuário. |
-| <img src="Documentação/images/postgreesql.png" alt="PostgreSQL" height="40"/> | **PostgreSQL** | Banco de dados relacional usado para armazenar e gerenciar as informações de alunos, professores e moedas. |
+| Logo                                                                           | Tecnologia | Descrição |
+|--------------------------------------------------------------------------------|-------------|-----------|
+| <img src="Documentação/Imagens/spring.png" alt="Spring Boot" height="40"/>     | **Spring Boot** | Framework Java utilizado no back-end, responsável pela API REST, autenticação e integração com o banco de dados. |
+| <img src="Documentação/Imagens/nextjs.png" alt="Next.js" height="40"/>         | **Next.js** | Framework React moderno usado no front-end, oferecendo renderização híbrida e excelente experiência do usuário. |
+| <img src="Documentação/Imagens/postgreesql.png" alt="PostgreSQL" height="40"/> | **PostgreSQL** | Banco de dados relacional usado para armazenar e gerenciar as informações de alunos, professores e moedas. |
 
 
 
