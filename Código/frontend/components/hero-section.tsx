@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Coins, ArrowRight } from "lucide-react"
+import Image from "next/image";
 
 interface HeroSectionProps {
     isAuthenticated?: boolean
@@ -10,8 +11,15 @@ export function HeroSection({ isAuthenticated = false }: HeroSectionProps) {
     return (
         <section className="container mx-auto px-4 py-20">
             <div className="max-w-4xl mx-auto text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-[#268c90] to-[#6ed3d8] rounded-2xl mb-6">
-                    <Coins className="w-10 h-10 text-white" />
+                <div className="inline-flex items-center justify-center w-40 h-40 rounded-2xl mb-6">
+                    <Image
+                        src="/logo-virtus.png"
+                        alt="Virtus Logo"
+                        width={200}
+                        height={100}
+                        className="h-40 w-auto"
+                        priority
+                    />
                 </div>
 
                 <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#268c90] to-[#6ed3d8] bg-clip-text text-transparent">
