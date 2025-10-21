@@ -46,9 +46,10 @@ No front-end, foi utilizado o **App Router do Next.js**, que permite uma estrutu
 
 | Logo | Tecnologia | Descrição |
 |------|-------------|-----------|
-| ![Logo Placeholder](Documentação/spring.png) | **Spring Boot** | Framework Java utilizado no back-end, responsável pela API REST, autenticação e integração com o banco de dados. |
-| ![Logo Placeholder](Documentação/nextjs.png) | **Next.js** | Framework React moderno usado no front-end, oferecendo renderização híbrida e excelente experiência do usuário. |
-| ![Logo Placeholder](Documentação/postgreesql.png) | **PostgreSQL** | Banco de dados relacional usado para armazenar e gerenciar as informações de alunos, professores e moedas. |
+| <img src="Documentação/images/spring.png" alt="Spring Boot" height="40"/> | **Spring Boot** | Framework Java utilizado no back-end, responsável pela API REST, autenticação e integração com o banco de dados. |
+| <img src="Documentação/images/nextjs.png" alt="Next.js" height="40"/> | **Next.js** | Framework React moderno usado no front-end, oferecendo renderização híbrida e excelente experiência do usuário. |
+| <img src="Documentação/images/postgreesql.png" alt="PostgreSQL" height="40"/> | **PostgreSQL** | Banco de dados relacional usado para armazenar e gerenciar as informações de alunos, professores e moedas. |
+
 
 
 ## 👥 Equipe
