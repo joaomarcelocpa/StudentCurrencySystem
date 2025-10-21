@@ -1,4 +1,4 @@
-# StudentCurrencySystem
+# Virtus
 Sistema de moeda estudantil desenvolvido no Laboratório de Desenvolvimento de Software, que permite a gestão de moedas de bonificação virtuais entre alunos e professores em ambiente acadêmico.
 
 ## 📋 Descrição
