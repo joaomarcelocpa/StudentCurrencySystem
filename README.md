@@ -1,8 +1,8 @@
-# Virtus
+# *Virtus*
 Sistema de moeda estudantil desenvolvido no Laboratório de Desenvolvimento de Software, que permite a gestão de moedas de bonificação virtuais entre alunos e professores em ambiente acadêmico.
 
 ## 📋 Descrição
-O StudentCurrencySystem é uma plataforma que implementa um sistema de economia interna para instituições de ensino, onde professores podem distribuir moedas virtuais aos alunos como recompensa por participação, desempenho acadêmico e outras atividades. Os alunos podem acumular e trocar essas moedas por benefícios e vantagens oferecidas pela instituição ou empresas parceiras.
+O Virtus é uma plataforma que implementa um sistema de economia interna para instituições de ensino, onde professores podem distribuir moedas virtuais aos alunos como recompensa por participação, desempenho acadêmico e outras atividades. Os alunos podem acumular e trocar essas moedas por benefícios e vantagens oferecidas pela instituição ou empresas parceiras.
 
 ## 📚 Documentação
 
@@ -30,7 +30,7 @@ O StudentCurrencySystem é uma plataforma que implementa um sistema de economia 
 
 ## 🏗️ Arquitetura do Sistema
 
-O **StudentCurrencySystem** foi desenvolvido com base na arquitetura **MVC (Model-View-Controller)**, que separa claramente as responsabilidades da aplicação, garantindo melhor organização, escalabilidade e manutenção do código.
+O **Virtus** foi desenvolvido com base na arquitetura **MVC (Model-View-Controller)**, que separa claramente as responsabilidades da aplicação, garantindo melhor organização, escalabilidade e manutenção do código.
 
 - **Model (Modelo):** Responsável pela lógica de negócio, regras e comunicação com o banco de dados.  
 - **View (Visão):** Camada de interface que exibe as informações ao usuário de forma amigável.  
