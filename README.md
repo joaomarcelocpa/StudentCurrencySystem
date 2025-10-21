@@ -25,10 +25,13 @@ Virtus  implementa um sistema de economia interna para instituições de ensino,
 ![Diagrama do Modelo Relacional](Documentação/Diagramas/Diagrama%20do%20Modelo%20Relacional.png)
 
 ### Histórias de Usuário
- [`Histórias de Usuário.pdf`](Documentação/Histórias%20de%20Usuário.pdf)
+ [`Histórias de Usuário.pdf`](Documentação/Diagramas/Histórias%20de%20Usuário.pdf)
 
 ### Script do Banco de Dados PostgreSQL
 [`script-postgresql.pdf`](Documentação/Scripts/script-postgresql.sql)
+
+### Apresentação do Projeto - Primeira Versão
+[`Apresentação Virtus.pdf`](Documentação/Apresentação/Apresentação%20Virtus.pdf)
 
 
 ## 🏗️ Arquitetura do Sistema
