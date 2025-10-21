@@ -31,7 +31,7 @@ Virtus  implementa um sistema de economia interna para instituições de ensino,
 [`script-postgresql.pdf`](Documentação/Scripts/script-postgresql.sql)
 
 ### Apresentação do Projeto - Primeira Versão
-[`Apresentação Virtus.pdf`](Documentação/Apresentação/Apresentação%20Virtus.pdf)
+[`Apresentação Virtus.pdf`](Documentação/Apresentações/Apresentação%20Virtus.pdf)
 
 
 ## 🏗️ Arquitetura do Sistema
