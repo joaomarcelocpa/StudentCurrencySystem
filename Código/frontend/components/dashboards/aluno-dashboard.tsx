@@ -1,20 +1,37 @@
+"use client"
+
 import {useEffect, useState} from "react";
 import {UserData} from "@/shared/interfaces/login.interface";
 import {loginService} from "@/shared/services/login.service";
 import Link from "next/link";
 import {Card} from "@/components/ui/card";
-import {ArrowRight, DollarSign, FileSpreadsheet, Repeat1, Send, User} from "lucide-react";
+import {ArrowRight, Coins, DollarSign, FileSpreadsheet, Loader2, Repeat1, Send, User} from "lucide-react";
 import {Button} from "@/components/ui/button";
+import {transacaoService} from "@/shared/services/transacao.service";
 
 export function AlunoDashboard(){
     const [aluno, setAluno] = useState<UserData | null>(null);
+    const [saldo, setSaldo] = useState<number | null>(null);
+    const [isLoadingSaldo, setIsLoadingSaldo] = useState(true);
 
     useEffect(() => {
         const userData = loginService.getUserData()
         if (userData && userData.tipo === 'ALUNO') {
             setAluno(userData);
+            loadSaldo(userData.id);
         }
     }, []);
+
+    const loadSaldo = async (alunoId: number) => {
+        try {
+            const saldoAtual = await transacaoService.getSaldoAluno(alunoId);
+            setSaldo(saldoAtual);
+        } catch (error) {
+            console.error('Erro ao carregar saldo:', error);
+        } finally {
+            setIsLoadingSaldo(false);
+        }
+    };
 
     return (
         <section className='container mx-auto px-4 py-20'>
@@ -26,6 +43,28 @@ export function AlunoDashboard(){
                     <p className='text-xl text-muted-foreground'>
                         Acompanhe seu saldo de moedas acadêmicas e resgate vantagens exclusivas
                     </p>
+                </div>
+
+                {/* Card de Saldo */}
+                <div className="mb-8 max-w-md mx-auto">
+                    <Card className="p-6 bg-gradient-to-br from-[#268c90] to-[#155457] text-white">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm opacity-90 mb-1">Seu Saldo</p>
+                                {isLoadingSaldo ? (
+                                    <div className="flex items-center gap-2">
+                                        <Loader2 className="w-5 h-5 animate-spin" />
+                                        <span className="text-2xl font-bold">Carregando...</span>
+                                    </div>
+                                ) : (
+                                    <p className="text-4xl font-bold">{saldo ?? 0} moedas</p>
+                                )}
+                            </div>
+                            <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center">
+                                <Coins className="w-8 h-8" />
+                            </div>
+                        </div>
+                    </Card>
                 </div>
             </div>
 

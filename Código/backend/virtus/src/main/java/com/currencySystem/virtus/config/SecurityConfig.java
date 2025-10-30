@@ -45,11 +45,13 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/alunos/cadastro").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/professores/cadastro").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/empresas/cadastro").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/admins/cadastro").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/instituicoes").permitAll()
 
                         .requestMatchers("/api/alunos/**").hasRole("ALUNO")
-
                         .requestMatchers("/api/professores/**").hasRole("PROFESSOR")
                         .requestMatchers("/api/empresas/**").hasRole("EMPRESA")
+                        .requestMatchers("/api/admins/**").hasRole("ADMIN")
                         .requestMatchers("/api/vantagens/**").authenticated()
 
                         .anyRequest().authenticated()

@@ -2,9 +2,11 @@ package com.currencySystem.virtus.service;
 
 import com.currencySystem.virtus.dto.*;
 import com.currencySystem.virtus.model.Aluno;
+import com.currencySystem.virtus.model.Instituicao;
 import com.currencySystem.virtus.model.Professor;
 import com.currencySystem.virtus.model.Transacao;
 import com.currencySystem.virtus.repository.AlunoRepository;
+import com.currencySystem.virtus.repository.InstituicaoRepository;
 import com.currencySystem.virtus.repository.ProfessorRepository;
 import com.currencySystem.virtus.repository.TransacaoRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class ProfessorService {
     private final ProfessorRepository professorRepository;
     private final AlunoRepository alunoRepository;
     private final TransacaoRepository transacaoRepository;
+    private final InstituicaoRepository instituicaoRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -33,12 +36,20 @@ public class ProfessorService {
             throw new IllegalArgumentException("CPF já cadastrado");
         }
 
+        // Buscar ou criar instituições
+        List<Instituicao> instituicoes = request.getInstituicoes().stream()
+                .map(sigla -> instituicaoRepository.findBySigla(sigla)
+                        .orElseThrow(() -> new IllegalArgumentException("Instituição não encontrada: " + sigla)))
+                .collect(Collectors.toList());
+
         Professor professor = new Professor(
                 request.getLogin(),
                 passwordEncoder.encode(request.getSenha()),
                 request.getNome(),
                 request.getCpf(),
-                request.getDepartamento()
+                request.getRg(),
+                request.getDepartamento(),
+                instituicoes
         );
 
         Professor saved = professorRepository.save(professor);
@@ -63,6 +74,18 @@ public class ProfessorService {
     }
 
     @Transactional(readOnly = true)
+    public List<AlunoResponse> listarAlunosDasInstituicoes(Long professorId) {
+        Professor professor = buscarPorId(professorId);
+
+        // Buscar alunos das instituições do professor
+        List<Aluno> alunos = alunoRepository.findByInstituicaoIn(professor.getInstituicoes());
+
+        return alunos.stream()
+                .map(AlunoResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
     public List<TransacaoResponse> consultarExtrato(Long professorId) {
         buscarPorId(professorId);
         return transacaoRepository.findByProfessorIdOrderByDataHoraDesc(professorId)
@@ -77,6 +100,17 @@ public class ProfessorService {
         Aluno aluno = alunoRepository.findById(alunoId)
                 .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado"));
 
+        // Validar se o aluno pertence a alguma instituição do professor
+        boolean alunoNaMesmaInstituicao = professor.getInstituicoes().stream()
+                .anyMatch(inst -> inst.equals(aluno.getInstituicao()));
+
+        if (!alunoNaMesmaInstituicao) {
+            throw new IllegalArgumentException(
+                    "Você só pode enviar moedas para alunos das instituições em que leciona. " +
+                    "Aluno pertence à: " + aluno.getInstituicao().getSigla()
+            );
+        }
+
         if (valor <= 0) {
             throw new IllegalArgumentException("Valor deve ser maior que zero");
         }
@@ -87,11 +121,11 @@ public class ProfessorService {
 
         Transacao transacao = professor.enviarMoedas(aluno, valor, motivo);
 
-        professorRepository.save(professor);
         alunoRepository.save(aluno);
-        Transacao savedTransacao = transacaoRepository.save(transacao);
+        professorRepository.save(professor);
+        professorRepository.flush();
 
-        return TransacaoResponse.fromEntity(savedTransacao);
+        return TransacaoResponse.fromEntity(transacao);
     }
 
     @Transactional

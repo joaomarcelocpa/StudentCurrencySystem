@@ -17,6 +17,7 @@ public class AlunoResponse {
     private String cpf;
     private String rg;
     private String endereco;
+    private String instituicao; // Sigla da instituição
     private Integer saldoMoedas;
     private Boolean ativo;
 
@@ -28,6 +29,7 @@ public class AlunoResponse {
         this.cpf = aluno.getCpf();
         this.rg = aluno.getRg();
         this.endereco = aluno.getEndereco();
+        this.instituicao = aluno.getInstituicao() != null ? aluno.getInstituicao().getSigla() : null;
         this.saldoMoedas = aluno.getSaldoMoedas();
         this.ativo = aluno.getAtivo();
     }

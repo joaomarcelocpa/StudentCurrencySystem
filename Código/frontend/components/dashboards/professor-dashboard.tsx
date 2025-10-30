@@ -2,21 +2,36 @@
 
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import {Coins, ArrowRight, Send, History, DollarSign, User, FileSpreadsheet} from "lucide-react"
+import {Coins, ArrowRight, Send, History, DollarSign, User, FileSpreadsheet, Loader2} from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { loginService } from "@/shared/services/login.service"
 import type { UserData } from "@/shared/interfaces/login.interface"
+import { transacaoService } from "@/shared/services/transacao.service"
 
 export function ProfessorDashboard() {
     const [professor, setProfessor] = useState<UserData | null>(null)
+    const [saldo, setSaldo] = useState<number | null>(null)
+    const [isLoadingSaldo, setIsLoadingSaldo] = useState(true)
 
     useEffect(() => {
         const userData = loginService.getUserData()
         if (userData && userData.tipo === 'PROFESSOR') {
             setProfessor(userData)
+            loadSaldo(userData.id)
         }
     }, [])
+
+    const loadSaldo = async (professorId: number) => {
+        try {
+            const saldoAtual = await transacaoService.getSaldoProfessor(professorId)
+            setSaldo(saldoAtual)
+        } catch (error) {
+            console.error('Erro ao carregar saldo:', error)
+        } finally {
+            setIsLoadingSaldo(false)
+        }
+    }
 
     return (
         <section className="container mx-auto px-4 py-20">
@@ -28,6 +43,28 @@ export function ProfessorDashboard() {
                     <p className="text-xl text-muted-foreground">
                         Reconheça e recompense seus alunos com moedas acadêmicas
                     </p>
+                </div>
+
+                {/* Card de Saldo */}
+                <div className="mb-8 max-w-md mx-auto">
+                    <Card className="p-6 bg-gradient-to-br from-[#268c90] to-[#155457] text-white">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm opacity-90 mb-1">Saldo Disponível</p>
+                                {isLoadingSaldo ? (
+                                    <div className="flex items-center gap-2">
+                                        <Loader2 className="w-5 h-5 animate-spin" />
+                                        <span className="text-2xl font-bold">Carregando...</span>
+                                    </div>
+                                ) : (
+                                    <p className="text-4xl font-bold">{saldo ?? 0} moedas</p>
+                                )}
+                            </div>
+                            <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center">
+                                <Coins className="w-8 h-8" />
+                            </div>
+                        </div>
+                    </Card>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">

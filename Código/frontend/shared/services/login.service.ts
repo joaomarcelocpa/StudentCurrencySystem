@@ -64,7 +64,7 @@ class LoginService {
         localStorage.setItem(this.TOKEN_KEY, authResponse.token);
 
         // Mapear o tipoUsuario para tipo
-        const tipo = authResponse.tipoUsuario as 'ALUNO' | 'EMPRESA' | 'PROFESSOR';
+        const tipo = authResponse.tipoUsuario as 'ALUNO' | 'EMPRESA' | 'PROFESSOR' | 'ADMIN';
 
         // Salvar dados do usuário
         const userData: UserData = {
@@ -110,7 +110,7 @@ class LoginService {
         localStorage.removeItem(this.USER_KEY);
     }
 
-    getUserType(): 'ALUNO' | 'EMPRESA' | 'PROFESSOR' | null {
+    getUserType(): 'ALUNO' | 'EMPRESA' | 'PROFESSOR' | 'ADMIN' | null {
         const userData = this.getUserData();
         return userData?.tipo || null;
     }

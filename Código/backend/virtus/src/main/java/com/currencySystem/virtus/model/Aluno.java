@@ -31,18 +31,22 @@ public class Aluno extends Usuario {
     @Column(nullable = false, length = 500)
     private String endereco;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "instituicao_id", nullable = false)
+    private Instituicao instituicao;
+
     @Column(nullable = false)
     private Integer saldoMoedas = 0;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "aluno", fetch = FetchType.LAZY)
     private List<Transacao> transacoesRecebidas = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ResgateVantagem> resgates = new ArrayList<>();
 
-    public Aluno(String login, String senha, String nome, String email, String cpf, String rg, String endereco) {
+    public Aluno(String login, String senha, String nome, String email, String cpf, String rg, String endereco, Instituicao instituicao) {
         this.setLogin(login);
         this.setSenha(senha);
         this.setTipo(TipoUsuario.ALUNO);
@@ -51,6 +55,7 @@ public class Aluno extends Usuario {
         this.cpf = cpf;
         this.rg = rg;
         this.endereco = endereco;
+        this.instituicao = instituicao;
         this.saldoMoedas = 0;
         this.setAtivo(true);
     }

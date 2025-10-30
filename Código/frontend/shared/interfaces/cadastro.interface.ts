@@ -9,6 +9,16 @@ export interface AlunoRequest {
     endereco: string;
 }
 
+export interface ProfessorRequest {
+    login: string;
+    senha: string;
+    nome: string;
+    cpf: string;
+    rg: string;
+    departamento: string;
+    instituicoes: string[]; // Array de siglas das instituições
+}
+
 export interface EmpresaRequest {
     login: string;
     senha: string;
@@ -27,6 +37,19 @@ export interface AlunoResponse {
     cpf: string;
     rg: string;
     endereco: string;
+    instituicao: string; // Sigla da instituição
+    saldoMoedas: number;
+    dataCadastro: string;
+}
+
+export interface ProfessorResponse {
+    id: number;
+    login: string;
+    nome: string;
+    cpf: string;
+    rg: string;
+    departamento: string;
+    instituicoes: string[]; // Array de siglas das instituições
     saldoMoedas: number;
     dataCadastro: string;
 }

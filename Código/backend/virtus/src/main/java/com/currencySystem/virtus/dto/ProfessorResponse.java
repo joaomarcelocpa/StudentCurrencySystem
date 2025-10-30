@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,7 +17,9 @@ public class ProfessorResponse {
     private String login;
     private String nome;
     private String cpf;
+    private String rg;
     private String departamento;
+    private List<String> instituicoes; // Lista de siglas das instituições
     private Integer saldoMoedas;
     private Boolean ativo;
 
@@ -23,7 +28,11 @@ public class ProfessorResponse {
         this.login = professor.getLogin();
         this.nome = professor.getNome();
         this.cpf = professor.getCpf();
+        this.rg = professor.getRg();
         this.departamento = professor.getDepartamento();
+        this.instituicoes = professor.getInstituicoes().stream()
+                .map(inst -> inst.getSigla())
+                .collect(Collectors.toList());
         this.saldoMoedas = professor.getSaldoMoedas();
         this.ativo = professor.getAtivo();
     }

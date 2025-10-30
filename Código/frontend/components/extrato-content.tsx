@@ -1,5 +1,11 @@
+"use client"
+
+import { useEffect, useState, useRef } from "react"
 import { Card } from "@/components/ui/card"
-import { ArrowUpRight, ArrowDownLeft, Calendar, FileText } from "lucide-react"
+import { ArrowUpRight, ArrowDownLeft, Calendar, FileText, Loader2 } from "lucide-react"
+import { transacaoService } from "@/shared/services/transacao.service"
+import { loginService } from "@/shared/services/login.service"
+import type { Transacao } from "@/shared/interfaces/transacao.interface"
 
 interface Transaction {
     id: number
@@ -14,120 +20,63 @@ interface ExtratoContentProps {
     userType: string
 }
 
-// Mock data para professor
-const mockTransactionsProfessor: Transaction[] = [
-    {
-        id: 1,
-        tipo: "ENVIADA",
-        valor: 50,
-        descricao: "Excelente participação nas aulas e projeto final bem elaborado",
-        data: "2025-10-28T14:30:00",
-        nomeContato: "Ana Silva Santos"
-    },
-    {
-        id: 2,
-        tipo: "ENVIADA",
-        valor: 30,
-        descricao: "Ótimo desempenho na apresentação do seminário",
-        data: "2025-10-27T10:15:00",
-        nomeContato: "Carlos Eduardo Oliveira"
-    },
-    {
-        id: 3,
-        tipo: "ENVIADA",
-        valor: 45,
-        descricao: "Dedicação excepcional nas atividades práticas",
-        data: "2025-10-25T16:20:00",
-        nomeContato: "Beatriz Costa Lima"
-    },
-    {
-        id: 4,
-        tipo: "ENVIADA",
-        valor: 25,
-        descricao: "Contribuição significativa no trabalho em grupo",
-        data: "2025-10-24T11:45:00",
-        nomeContato: "Daniel Ferreira Rocha"
-    },
-    {
-        id: 5,
-        tipo: "ENVIADA",
-        valor: 60,
-        descricao: "Desempenho exemplar na prova e trabalhos extras",
-        data: "2025-10-22T09:30:00",
-        nomeContato: "Eduarda Mendes Alves"
-    },
-    {
-        id: 6,
-        tipo: "ENVIADA",
-        valor: 35,
-        descricao: "Boa resolução dos exercícios e participação ativa",
-        data: "2025-10-20T15:00:00",
-        nomeContato: "Felipe Santos Martins"
-    },
-    {
-        id: 7,
-        tipo: "ENVIADA",
-        valor: 40,
-        descricao: "Comprometimento e melhoria contínua ao longo do semestre",
-        data: "2025-10-18T13:10:00",
-        nomeContato: "Gabriela Rodrigues Souza"
-    }
-]
-
-// Mock data para aluno
-const mockTransactionsAluno: Transaction[] = [
-    {
-        id: 1,
-        tipo: "RECEBIDA",
-        valor: 50,
-        descricao: "Excelente participação nas aulas e projeto final bem elaborado",
-        data: "2025-10-28T14:30:00",
-        nomeContato: "Prof. Dr. João Carlos Silva"
-    },
-    {
-        id: 2,
-        tipo: "RECEBIDA",
-        valor: 35,
-        descricao: "Ótimo desempenho na prova trimestral",
-        data: "2025-10-25T10:15:00",
-        nomeContato: "Profa. Dra. Maria Santos"
-    },
-    {
-        id: 3,
-        tipo: "RECEBIDA",
-        valor: 40,
-        descricao: "Trabalho de pesquisa muito bem fundamentado",
-        data: "2025-10-22T16:20:00",
-        nomeContato: "Prof. Dr. João Carlos Silva"
-    },
-    {
-        id: 4,
-        tipo: "RECEBIDA",
-        valor: 25,
-        descricao: "Participação ativa nos debates em sala",
-        data: "2025-10-20T11:45:00",
-        nomeContato: "Prof. Ms. Ricardo Mendes"
-    },
-    {
-        id: 5,
-        tipo: "RECEBIDA",
-        valor: 45,
-        descricao: "Excelente apresentação do seminário de conclusão",
-        data: "2025-10-18T09:30:00",
-        nomeContato: "Profa. Dra. Maria Santos"
-    },
-    {
-        id: 6,
-        tipo: "RECEBIDA",
-        valor: 30,
-        descricao: "Dedicação nos exercícios práticos de laboratório",
-        data: "2025-10-15T15:00:00",
-        nomeContato: "Prof. Dr. João Carlos Silva"
-    }
-]
-
 export function ExtratoContent({ userType }: ExtratoContentProps) {
-    const transactions = userType === "PROFESSOR" ? mockTransactionsProfessor : mockTransactionsAluno
+    const [transactions, setTransactions] = useState<Transaction[]>([])
+    const [isLoading, setIsLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
+    const hasLoadedRef = useRef(false)
+
+    useEffect(() => {
+        if (hasLoadedRef.current) {
+            return
+        }
+        hasLoadedRef.current = true
+
+        const loadTransactions = async () => {
+            try {
+                const userData = loginService.getUserData()
+                if (!userData) {
+                    setError('Usuário não autenticado')
+                    setIsLoading(false)
+                    return
+                }
+
+                let transacoesData: Transacao[] = []
+
+                if (userType === "PROFESSOR") {
+                    transacoesData = await transacaoService.getExtratoProfessor(userData.id)
+                } else if (userType === "ALUNO") {
+                    transacoesData = await transacaoService.getExtratoAluno(userData.id)
+                }
+
+                const transacoesFormatadas: Transaction[] = transacoesData.map((t: Transacao) => ({
+                    id: t.id,
+                    tipo: userType === "PROFESSOR" ? "ENVIADA" : "RECEBIDA",
+                    valor: t.valor,
+                    descricao: t.motivo,
+                    data: t.dataHora,
+                    nomeContato: userType === "PROFESSOR" ? t.alunoNome : t.professorNome
+                }))
+
+                const unicosPorId = Array.from(
+                    new Map(transacoesFormatadas.map((t) => [t.id, t])).values()
+                )
+
+                setTransactions(unicosPorId)
+                setIsLoading(false)
+            } catch (err) {
+                console.error('Erro ao carregar extrato:', err)
+                setError('Erro ao carregar extrato. Tente novamente.')
+                setIsLoading(false)
+            }
+        }
+
+        loadTransactions()
+
+        return () => {
+            hasLoadedRef.current = false
+        }
+    }, [userType])
 
     const totalTransferido = transactions.reduce((acc, t) => acc + t.valor, 0)
 
@@ -142,8 +91,21 @@ export function ExtratoContent({ userType }: ExtratoContentProps) {
         }).format(date)
     }
 
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-[#268c90]" />
+            </div>
+        )
+    }
+
     return (
         <div className="max-w-5xl mx-auto space-y-6">
+            {error && (
+                <div className="p-4 bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-300 rounded-md">
+                    {error}
+                </div>
+            )}
             {/* Header com Total ao lado */}
             <div className="flex items-center justify-between">
                 <div>

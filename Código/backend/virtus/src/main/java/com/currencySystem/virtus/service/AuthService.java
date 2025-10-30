@@ -2,6 +2,7 @@ package com.currencySystem.virtus.service;
 
 import com.currencySystem.virtus.dto.AuthResponse;
 import com.currencySystem.virtus.dto.LoginRequest;
+import com.currencySystem.virtus.model.Admin;
 import com.currencySystem.virtus.model.Aluno;
 import com.currencySystem.virtus.model.Professor;
 import com.currencySystem.virtus.model.Empresa;
@@ -44,8 +45,10 @@ public class AuthService {
             nome = ((Aluno) usuario).getNome();
         } else if (usuario instanceof Professor) {
             nome = ((Professor) usuario).getNome();
-        } else if (usuario instanceof Empresa) {  // ✅ ADICIONE ESTA LINHA
+        } else if (usuario instanceof Empresa) {
             nome = ((Empresa) usuario).getNome();
+        } else if (usuario instanceof Admin) {
+            nome = ((Admin) usuario).getNome();
         }
 
         return new AuthResponse(

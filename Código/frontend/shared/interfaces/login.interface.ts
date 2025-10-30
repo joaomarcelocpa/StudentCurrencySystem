@@ -10,7 +10,7 @@ export interface AuthResponse {
     tipo?: string; // "Bearer"
     id: number;
     login: string;
-    tipoUsuario: string; // 'ALUNO' | 'EMPRESA' | 'PROFESSOR'
+    tipoUsuario: string; // 'ALUNO' | 'EMPRESA' | 'PROFESSOR' | 'ADMIN'
     nome: string;
     // Campos adicionais podem vir do backend
     email?: string;
@@ -25,7 +25,7 @@ export interface AuthResponse {
 // Interface para dados do usuário armazenados
 export interface UserData {
     token: string;
-    tipo: 'ALUNO' | 'EMPRESA' | 'PROFESSOR';
+    tipo: 'ALUNO' | 'EMPRESA' | 'PROFESSOR' | 'ADMIN';
     id: number;
     nome: string;
     email?: string;

@@ -22,25 +22,52 @@ public class Professor extends Usuario {
     @Column(nullable = false, unique = true, length = 11)
     private String cpf;
 
+    @Column(nullable = false, length = 20)
+    private String rg;
+
     @Column(nullable = false, length = 200)
     private String departamento;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "professor_instituicao",
+            joinColumns = @JoinColumn(name = "professor_id"),
+            inverseJoinColumns = @JoinColumn(name = "instituicao_id")
+    )
+    private List<Instituicao> instituicoes = new ArrayList<>();
+
     @Column(nullable = false)
-    private Integer saldoMoedas = 1000; 
+    private Integer saldoMoedas = 1000;
 
     @JsonIgnore
     @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Transacao> transacoesEnviadas = new ArrayList<>();
 
-    public Professor(String login, String senha, String nome, String cpf, String departamento) {
+    public Professor(String login, String senha, String nome, String cpf, String rg, String departamento, List<Instituicao> instituicoes) {
         this.setLogin(login);
         this.setSenha(senha);
         this.setTipo(TipoUsuario.PROFESSOR);
         this.nome = nome;
         this.cpf = cpf;
+        this.rg = rg;
         this.departamento = departamento;
+        this.instituicoes = instituicoes != null ? instituicoes : new ArrayList<>();
         this.saldoMoedas = 1000;
         this.setAtivo(true);
+    }
+
+    public void adicionarInstituicao(Instituicao instituicao) {
+        if (!this.instituicoes.contains(instituicao)) {
+            this.instituicoes.add(instituicao);
+            instituicao.getProfessores().add(this);
+        }
+    }
+
+    public void removerInstituicao(Instituicao instituicao) {
+        if (this.instituicoes.contains(instituicao)) {
+            this.instituicoes.remove(instituicao);
+            instituicao.getProfessores().remove(this);
+        }
     }
 
     @Override

@@ -72,6 +72,28 @@ public class ProfessorController {
     }
 
     /**
+     * GET /api/professores/{id}/alunos
+     * Lista alunos das instituições que o professor participa
+     * @param id ID do professor
+     * @param authentication Dados de autenticação
+     * @return Lista de alunos das mesmas instituições
+     */
+    @GetMapping("/{id}/alunos")
+    @PreAuthorize("hasRole('PROFESSOR')")
+    public ResponseEntity<List<AlunoResponse>> listarAlunosDasInstituicoes(
+            @PathVariable Long id,
+            Authentication authentication
+    ) {
+        Professor professorAutenticado = (Professor) authentication.getPrincipal();
+        if (!professorAutenticado.getId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        List<AlunoResponse> alunos = professorService.listarAlunosDasInstituicoes(id);
+        return ResponseEntity.ok(alunos);
+    }
+
+    /**
      * POST /api/professores/{id}/enviar-moedas
      * Envia moedas virtuais para um aluno
      * @param id ID do professor

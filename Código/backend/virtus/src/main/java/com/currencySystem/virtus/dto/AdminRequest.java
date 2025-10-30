@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AlunoRequest {
+public class AdminRequest {
 
     @NotBlank(message = "Login é obrigatório")
     @Size(min = 3, max = 100, message = "Login deve ter entre 3 e 100 caracteres")
@@ -32,15 +32,4 @@ public class AlunoRequest {
     @NotBlank(message = "CPF é obrigatório")
     @Size(min = 11, max = 11, message = "CPF deve ter 11 caracteres")
     private String cpf;
-
-    @NotBlank(message = "RG é obrigatório")
-    @Size(max = 20, message = "RG deve ter no máximo 20 caracteres")
-    private String rg;
-
-    @NotBlank(message = "Endereço é obrigatório")
-    @Size(max = 500, message = "Endereço deve ter no máximo 500 caracteres")
-    private String endereco;
-
-    @NotBlank(message = "Instituição é obrigatória")
-    private String instituicao; // Sigla da instituição
 }

@@ -1,113 +1,118 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Header } from "@/components/headers/header"
 import { CoinSenderHeader } from "@/components/headers/coin-sender-header"
 import { StudentList } from "@/components/student-list"
 import { TransferModal } from "@/components/transfer-modal"
 import type { Student } from "@/shared/interfaces/coin-sender.interface"
-
-// Mock data - será substituído pela API
-const mockStudents: Student[] = [
-    {
-        id: 1,
-        nome: "Ana Silva Santos",
-        email: "ana.silva@email.com",
-        cpf: "123.456.789-00",
-        curso: "Ciência da Computação",
-        instituicao: "UFMG",
-        saldoMoedas: 150
-    },
-    {
-        id: 2,
-        nome: "Carlos Eduardo Oliveira",
-        email: "carlos.oliveira@email.com",
-        cpf: "234.567.890-11",
-        curso: "Engenharia de Software",
-        instituicao: "UFMG",
-        saldoMoedas: 320
-    },
-    {
-        id: 3,
-        nome: "Beatriz Costa Lima",
-        email: "beatriz.lima@email.com",
-        cpf: "345.678.901-22",
-        curso: "Sistemas de Informação",
-        instituicao: "UFMG",
-        saldoMoedas: 95
-    },
-    {
-        id: 4,
-        nome: "Daniel Ferreira Rocha",
-        email: "daniel.rocha@email.com",
-        cpf: "456.789.012-33",
-        curso: "Ciência da Computação",
-        instituicao: "UFMG",
-        saldoMoedas: 280
-    },
-    {
-        id: 5,
-        nome: "Eduarda Mendes Alves",
-        email: "eduarda.alves@email.com",
-        cpf: "567.890.123-44",
-        curso: "Engenharia de Software",
-        instituicao: "UFMG",
-        saldoMoedas: 175
-    },
-    {
-        id: 6,
-        nome: "Felipe Santos Martins",
-        email: "felipe.martins@email.com",
-        cpf: "678.901.234-55",
-        curso: "Ciência da Computação",
-        instituicao: "UFMG",
-        saldoMoedas: 420
-    },
-    {
-        id: 7,
-        nome: "Gabriela Rodrigues Souza",
-        email: "gabriela.souza@email.com",
-        cpf: "789.012.345-66",
-        curso: "Sistemas de Informação",
-        instituicao: "UFMG",
-        saldoMoedas: 210
-    },
-    {
-        id: 8,
-        nome: "Henrique Barbosa Lima",
-        email: "henrique.lima@email.com",
-        cpf: "890.123.456-77",
-        curso: "Ciência da Computação",
-        instituicao: "UFMG",
-        saldoMoedas: 340
-    }
-]
-
-const mockProfessorBalance = 1000
+import { transacaoService } from "@/shared/services/transacao.service"
+import { loginService } from "@/shared/services/login.service"
+import { Loader2 } from "lucide-react"
+import type { AlunoResponse } from "@/shared/interfaces/transacao.interface"
 
 export default function CoinSenderPage() {
-    const [students] = useState<Student[]>(mockStudents)
-    const [professorBalance, setProfessorBalance] = useState(mockProfessorBalance)
+    const router = useRouter()
+    const [students, setStudents] = useState<Student[]>([])
+    const [professorBalance, setProfessorBalance] = useState(0)
     const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [searchTerm, setSearchTerm] = useState("")
+    const [isLoading, setIsLoading] = useState(true)
+    const [isTransferring, setIsTransferring] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                const userData = loginService.getUserData()
+
+                if (!userData) {
+                    router.push('/login')
+                    return
+                }
+
+                if (userData.tipo !== 'PROFESSOR') {
+                    router.push('/home')
+                    return
+                }
+
+                // Buscar saldo do professor
+                const saldo = await transacaoService.getSaldoProfessor(userData.id)
+                setProfessorBalance(saldo)
+
+                // Buscar lista de alunos das instituições do professor
+                const alunosData = await transacaoService.getAlunosDasInstituicoes(userData.id)
+
+                // Mapear para o formato Student
+                const alunosFormatados: Student[] = alunosData.map((aluno: AlunoResponse) => ({
+                    id: aluno.id,
+                    nome: aluno.nome,
+                    email: aluno.email,
+                    cpf: aluno.cpf,
+                    curso: "Não informado", // Backend não retorna curso
+                    instituicao: aluno.instituicao || "N/A", // Sigla da instituição vinda do backend
+                    saldoMoedas: aluno.saldoMoedas
+                }))
+
+                setStudents(alunosFormatados)
+                setIsLoading(false)
+            } catch (err) {
+                console.error('Erro ao carregar dados:', err)
+                setError('Erro ao carregar dados. Tente novamente.')
+                setIsLoading(false)
+            }
+        }
+
+        loadData()
+    }, [router])
 
     const handleSelectStudent = (student: Student) => {
         setSelectedStudent(student)
         setIsModalOpen(true)
     }
 
-    const handleTransfer = (amount: number, description: string) => {
-        if (selectedStudent && amount <= professorBalance) {
-            console.log("Transferindo:", {
-                studentId: selectedStudent.id,
-                amount,
-                description
+    const handleTransfer = async (amount: number, description: string) => {
+        if (isTransferring) {
+            return
+        }
+
+        if (!selectedStudent || amount > professorBalance) {
+            return
+        }
+
+        setIsTransferring(true)
+        setError(null)
+
+        try {
+            const userData = loginService.getUserData()
+            if (!userData) {
+                router.push('/login')
+                return
+            }
+
+            await transacaoService.enviarMoedas(userData.id, {
+                alunoId: selectedStudent.id,
+                valor: amount,
+                motivo: description
             })
 
             setProfessorBalance(prev => prev - amount)
+
+            setStudents(prev => prev.map(student =>
+                student.id === selectedStudent.id
+                    ? { ...student, saldoMoedas: student.saldoMoedas + amount }
+                    : student
+            ))
+
             setIsModalOpen(false)
             setSelectedStudent(null)
+        } catch (err: any) {
+            console.error('Erro ao transferir moedas:', err)
+            setError(err.message || 'Erro ao transferir moedas. Tente novamente.')
+        } finally {
+            setIsTransferring(false)
         }
     }
 
@@ -117,10 +122,24 @@ export default function CoinSenderPage() {
         student.curso.toLowerCase().includes(searchTerm.toLowerCase())
     )
 
+    if (isLoading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-[#268c90]" />
+            </div>
+        )
+    }
+
     return (
         <div className="min-h-screen bg-background">
             <Header />
             <main className="container mx-auto px-4 py-8">
+                {error && (
+                    <div className="mb-4 p-4 bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-300 rounded-md">
+                        {error}
+                    </div>
+                )}
+
                 <CoinSenderHeader
                     professorBalance={professorBalance}
                     searchTerm={searchTerm}
@@ -141,6 +160,7 @@ export default function CoinSenderPage() {
                     student={selectedStudent}
                     professorBalance={professorBalance}
                     onTransfer={handleTransfer}
+                    isTransferring={isTransferring}
                 />
             </main>
         </div>

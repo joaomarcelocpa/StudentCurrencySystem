@@ -1,10 +1,13 @@
 package com.currencySystem.virtus.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -27,7 +30,14 @@ public class ProfessorRequest {
     @Size(min = 11, max = 11, message = "CPF deve ter 11 caracteres")
     private String cpf;
 
+    @NotBlank(message = "RG é obrigatório")
+    @Size(max = 20, message = "RG deve ter no máximo 20 caracteres")
+    private String rg;
+
     @NotBlank(message = "Departamento é obrigatório")
     @Size(max = 200, message = "Departamento deve ter no máximo 200 caracteres")
     private String departamento;
+
+    @NotEmpty(message = "Pelo menos uma instituição é obrigatória")
+    private List<String> instituicoes; // Lista de siglas das instituições
 }

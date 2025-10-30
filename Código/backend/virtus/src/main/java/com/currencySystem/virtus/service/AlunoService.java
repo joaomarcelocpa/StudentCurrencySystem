@@ -2,10 +2,12 @@ package com.currencySystem.virtus.service;
 
 import com.currencySystem.virtus.dto.*;
 import com.currencySystem.virtus.model.Aluno;
+import com.currencySystem.virtus.model.Instituicao;
 import com.currencySystem.virtus.model.ResgateVantagem;
 import com.currencySystem.virtus.model.Transacao;
 import com.currencySystem.virtus.model.Vantagem;
 import com.currencySystem.virtus.repository.AlunoRepository;
+import com.currencySystem.virtus.repository.InstituicaoRepository;
 import com.currencySystem.virtus.repository.ResgateVantagemRepository;
 import com.currencySystem.virtus.repository.TransacaoRepository;
 import com.currencySystem.virtus.repository.VantagemRepository;
@@ -26,6 +28,7 @@ public class AlunoService {
     private final TransacaoRepository transacaoRepository;
     private final VantagemRepository vantagemRepository;
     private final ResgateVantagemRepository resgateVantagemRepository;
+    private final InstituicaoRepository instituicaoRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -40,6 +43,10 @@ public class AlunoService {
             throw new IllegalArgumentException("CPF já cadastrado");
         }
 
+        // Buscar instituição
+        Instituicao instituicao = instituicaoRepository.findBySigla(request.getInstituicao())
+                .orElseThrow(() -> new IllegalArgumentException("Instituição não encontrada: " + request.getInstituicao()));
+
         Aluno aluno = new Aluno(
                 request.getLogin(),
                 passwordEncoder.encode(request.getSenha()),
@@ -47,7 +54,8 @@ public class AlunoService {
                 request.getEmail(),
                 request.getCpf(),
                 request.getRg(),
-                request.getEndereco()
+                request.getEndereco(),
+                instituicao
         );
 
         Aluno savedAluno = alunoRepository.save(aluno);

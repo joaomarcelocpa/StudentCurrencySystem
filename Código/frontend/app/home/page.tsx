@@ -11,6 +11,7 @@ import { Loader2 } from "lucide-react"
 import { ProfessorDashboard } from "@/components/dashboards/professor-dashboard"
 import {AlunoDashboard} from "@/components/dashboards/aluno-dashboard";
 import {EmpresaDashboard} from "@/components/dashboards/empresa-dashboard";
+import {AdminDashboard} from "@/components/dashboards/admin-dashboard";
 
 export default function HomePage() {
     const router = useRouter()
@@ -64,6 +65,17 @@ export default function HomePage() {
                 <Header />
                 <main>
                     <EmpresaDashboard />
+                </main>
+            </div>
+        )
+    }
+
+    if (userData?.tipo === 'ADMIN'){
+        return (
+            <div className='min-h-screen'>
+                <Header />
+                <main>
+                    <AdminDashboard />
                 </main>
             </div>
         )

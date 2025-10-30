@@ -2,20 +2,24 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Checkbox } from "@/components/ui/checkbox"
+import { MultiSelect } from "@/components/ui/multi-select"
 import Link from "next/link"
-import { User, Building2, Loader2 } from "lucide-react"
+import { User, Building2, GraduationCap, Loader2 } from "lucide-react"
 import { cadastroService } from "@/shared/services/cadastro.service"
-import type { AlunoRequest, EmpresaRequest, ApiError } from "@/shared/interfaces/cadastro.interface"
+import { instituicaoService } from "@/shared/services/instituicao.service"
+import type { AlunoRequest, ProfessorRequest, EmpresaRequest, ApiError } from "@/shared/interfaces/cadastro.interface"
+import type { Instituicao } from "@/shared/interfaces/instituicao.interface"
 import { useRouter } from "next/navigation"
 
-type UserType = "student" | "company"
+type UserType = "student" | "professor" | "company"
 
 export function RegisterForm() {
     const router = useRouter()
@@ -23,6 +27,7 @@ export function RegisterForm() {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+    const [instituicoes, setInstituicoes] = useState<Instituicao[]>([])
 
     const [formData, setFormData] = useState({
         name: "",
@@ -31,11 +36,26 @@ export function RegisterForm() {
         cpf: "",
         rg: "",
         address: "",
-        institution: "",
+        institution: "", // Para aluno
         course: "",
+        departamento: "",
+        instituicoesProfessor: [] as string[], // Para professor (array de siglas)
         cnpj: "",
         description: "",
     })
+
+    // Buscar instituições ao carregar componente
+    useEffect(() => {
+        const fetchInstituicoes = async () => {
+            try {
+                const data = await instituicaoService.listarTodas()
+                setInstituicoes(data)
+            } catch (err) {
+                console.error('Erro ao carregar instituições:', err)
+            }
+        }
+        fetchInstituicoes()
+    }, [])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -56,10 +76,38 @@ export function RegisterForm() {
                     cpf: cpfLimpo,
                     rg: formData.rg,
                     endereco: formData.address,
+                    instituicao: formData.institution, // Sigla da instituição
                 }
 
                 const response = await cadastroService.cadastrarAluno(alunoData)
                 console.log("Aluno cadastrado com sucesso:", response)
+
+                // Redirecionar para login ou dashboard
+                router.push("/login?registered=true")
+
+            } else if (userType === "professor") {
+                // Remover pontuação do CPF (000.000.000-00 -> 00000000000)
+                const cpfLimpo = formData.cpf.replace(/[.-]/g, '')
+
+                // Validar se selecionou pelo menos uma instituição
+                if (formData.instituicoesProfessor.length === 0) {
+                    setError("Selecione pelo menos uma instituição de ensino")
+                    setIsLoading(false)
+                    return
+                }
+
+                const professorData: ProfessorRequest = {
+                    login: formData.email, // Usando email como login
+                    senha: formData.password,
+                    nome: formData.name,
+                    cpf: cpfLimpo,
+                    rg: formData.rg,
+                    departamento: formData.departamento,
+                    instituicoes: formData.instituicoesProfessor, // Array de siglas
+                }
+
+                const response = await cadastroService.cadastrarProfessor(professorData)
+                console.log("Professor cadastrado com sucesso:", response)
 
                 // Redirecionar para login ou dashboard
                 router.push("/login?registered=true")
@@ -144,6 +192,20 @@ export function RegisterForm() {
 
                 <button
                     type="button"
+                    onClick={() => setUserType("professor")}
+                    disabled={isLoading}
+                    className={`flex-1 p-4 rounded-xl border-2 transition-all ${
+                        userType === "professor" ? "border-[#268c90] bg-[#268c90]/5" : "border-border hover:border-[#6ed3d8]"
+                    }`}
+                >
+                    <GraduationCap
+                        className={`w-8 h-8 mx-auto mb-2 ${userType === "professor" ? "text-[#268c90]" : "text-muted-foreground"}`}
+                    />
+                    <p className={`font-medium ${userType === "professor" ? "text-[#268c90]" : "text-foreground"}`}>Professor</p>
+                </button>
+
+                <button
+                    type="button"
                     onClick={() => setUserType("company")}
                     disabled={isLoading}
                     className={`flex-1 p-4 rounded-xl border-2 transition-all ${
@@ -162,11 +224,11 @@ export function RegisterForm() {
                 <div className="grid md:grid-cols-3 gap-4">
                     <div className="space-y-2">
                         <Label htmlFor="name" className="text-foreground font-medium">
-                            Nome {userType === "company" && "da Empresa"}
+                            Nome {userType === "company" && "da Empresa"}{userType === "professor" && "Completo"}
                         </Label>
                         <Input
                             id="name"
-                            placeholder={userType === "student" ? "Seu nome completo" : "Nome da empresa"}
+                            placeholder={userType === "student" ? "Seu nome completo" : userType === "professor" ? "Seu nome completo" : "Nome da empresa"}
                             value={formData.name}
                             onChange={(e) => updateField("name", e.target.value)}
                             className={`h-11 ${fieldErrors.nome ? 'border-red-500' : ''}`}
@@ -262,11 +324,11 @@ export function RegisterForm() {
                                         <SelectValue placeholder="Selecione" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="ufmg">UFMG</SelectItem>
-                                        <SelectItem value="usp">USP</SelectItem>
-                                        <SelectItem value="unicamp">UNICAMP</SelectItem>
-                                        <SelectItem value="ufrj">UFRJ</SelectItem>
-                                        <SelectItem value="puc">PUC</SelectItem>
+                                        {instituicoes.map((inst) => (
+                                            <SelectItem key={inst.id} value={inst.sigla}>
+                                                {inst.sigla} - {inst.nome}
+                                            </SelectItem>
+                                        ))}
                                     </SelectContent>
                                 </Select>
                             </div>
@@ -304,6 +366,85 @@ export function RegisterForm() {
                                 />
                                 {fieldErrors.endereco && <p className="text-red-500 text-xs mt-1">{fieldErrors.endereco}</p>}
                             </div>
+                        </div>
+                    </>
+                ) : userType === "professor" ? (
+                    <>
+                        {/* CPF e RG em linha */}
+                        <div className="grid md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="cpf" className="text-foreground font-medium">
+                                    CPF
+                                </Label>
+                                <Input
+                                    id="cpf"
+                                    placeholder="000.000.000-00"
+                                    value={formData.cpf}
+                                    onChange={(e) => updateField("cpf", e.target.value)}
+                                    className={`h-11 ${fieldErrors.cpf ? 'border-red-500' : ''}`}
+                                    disabled={isLoading}
+                                    maxLength={14}
+                                    required
+                                />
+                                {fieldErrors.cpf && <p className="text-red-500 text-xs mt-1">{fieldErrors.cpf}</p>}
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="rg" className="text-foreground font-medium">
+                                    RG
+                                </Label>
+                                <Input
+                                    id="rg"
+                                    placeholder="00.000.000-0"
+                                    value={formData.rg}
+                                    onChange={(e) => updateField("rg", e.target.value)}
+                                    className={`h-11 ${fieldErrors.rg ? 'border-red-500' : ''}`}
+                                    disabled={isLoading}
+                                    required
+                                />
+                                {fieldErrors.rg && <p className="text-red-500 text-xs mt-1">{fieldErrors.rg}</p>}
+                            </div>
+                        </div>
+
+                        {/* Departamento */}
+                        <div className="space-y-2">
+                            <Label htmlFor="departamento" className="text-foreground font-medium">
+                                Departamento
+                            </Label>
+                            <Input
+                                id="departamento"
+                                placeholder="Ex: Computação, Matemática"
+                                value={formData.departamento}
+                                onChange={(e) => updateField("departamento", e.target.value)}
+                                className={`h-11 ${fieldErrors.departamento ? 'border-red-500' : ''}`}
+                                disabled={isLoading}
+                                required
+                            />
+                            {fieldErrors.departamento && <p className="text-red-500 text-xs mt-1">{fieldErrors.departamento}</p>}
+                        </div>
+
+                        {/* Instituições de Ensino (Multiselect) */}
+                        <div className="space-y-2">
+                            <Label className="text-foreground font-medium">
+                                Instituições de Ensino *
+                            </Label>
+                            <p className="text-sm text-muted-foreground mb-2">
+                                Selecione todas as instituições em que você leciona
+                            </p>
+                            <MultiSelect
+                                options={instituicoes.map(inst => ({
+                                    label: `${inst.sigla} - ${inst.nome}`,
+                                    value: inst.sigla
+                                }))}
+                                selected={formData.instituicoesProfessor}
+                                onChange={(values) => setFormData(prev => ({ ...prev, instituicoesProfessor: values }))}
+                                placeholder="Selecione instituições..."
+                                emptyText="Nenhuma instituição encontrada"
+                                disabled={isLoading}
+                            />
+                            {formData.instituicoesProfessor.length === 0 && (
+                                <p className="text-amber-600 text-xs mt-1">Selecione pelo menos uma instituição</p>
+                            )}
                         </div>
                     </>
                 ) : (

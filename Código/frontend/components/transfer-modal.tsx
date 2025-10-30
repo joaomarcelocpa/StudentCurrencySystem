@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
     Dialog,
     DialogContent,
@@ -22,6 +22,7 @@ interface TransferModalProps {
     student: Student | null
     professorBalance: number
     onTransfer: (amount: number, description: string) => void
+    isTransferring?: boolean
 }
 
 export function TransferModal({
@@ -29,18 +30,27 @@ export function TransferModal({
                                   onClose,
                                   student,
                                   professorBalance,
-                                  onTransfer
+                                  onTransfer,
+                                  isTransferring = false
                               }: TransferModalProps) {
     const [amount, setAmount] = useState("")
     const [description, setDescription] = useState("")
     const [errors, setErrors] = useState<{ amount?: string; description?: string }>({})
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     const handleClose = () => {
         setAmount("")
         setDescription("")
         setErrors({})
+        setIsSubmitting(false)
         onClose()
     }
+
+    useEffect(() => {
+        if (!isTransferring && isSubmitting) {
+            setIsSubmitting(false)
+        }
+    }, [isTransferring, isSubmitting])
 
     const validateForm = (): boolean => {
         const newErrors: { amount?: string; description?: string } = {}
@@ -68,9 +78,13 @@ export function TransferModal({
     }
 
     const handleSubmit = () => {
+        if (isSubmitting || isTransferring) {
+            return
+        }
+
         if (validateForm() && student) {
+            setIsSubmitting(true)
             onTransfer(Number(amount), description.trim())
-            handleClose()
         }
     }
 
@@ -182,10 +196,10 @@ export function TransferModal({
                     <Button
                         onClick={handleSubmit}
                         className="bg-[#268c90] hover:bg-[#155457] text-white"
-                        disabled={!amount || !description.trim()}
+                        disabled={!amount || !description.trim() || isSubmitting || isTransferring}
                     >
                         <Coins className="w-4 h-4 mr-2" />
-                        Confirmar Envio
+                        {isSubmitting || isTransferring ? 'Enviando...' : 'Confirmar Envio'}
                     </Button>
                 </DialogFooter>
             </DialogContent>

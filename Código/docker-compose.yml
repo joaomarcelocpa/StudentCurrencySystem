@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend/virtus
+      dockerfile: Dockerfile
+    container_name: virtus-backend
+    env_file:
+      - .env
+    volumes:
+      - ./backend/virtus/src:/app/src
+      - ./backend/virtus/pom.xml:/app/pom.xml
+      - maven-cache:/root/.m2
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:-jdbc:postgresql://postgres:5432/studentcurrency}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO:-update}
+      SPRING_JPA_SHOW_SQL: ${SPRING_JPA_SHOW_SQL:-false}
+      SPRING_JPA_FORMAT_SQL: ${SPRING_JPA_FORMAT_SQL:-true}
+
+      JWT_SECRET: ${JWT_SECRET:-404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
+
+      SERVER_PORT: ${BACKEND_PORT:-8080}
+
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:4200}
+
+      LOGGING_LEVEL_SECURITY: ${LOGGING_LEVEL_SECURITY:-INFO}
+      LOGGING_LEVEL_APP: ${LOGGING_LEVEL_APP:-INFO}
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
+    networks:
+      - virtus-network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: virtus-frontend
+    env_file:
+      - .env
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8080}
+      NODE_ENV: development
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    depends_on:
+      - backend
+    networks:
+      - virtus-network
+    restart: unless-stopped
+
+volumes:
+  maven-cache:
+    driver: local
+
+networks:
+  virtus-network:
+    driver: bridge

@@ -1,0 +1,38 @@
+# ==============================================================================
+# .gitignore - Sistema de Moeda Estudantil Virtus
+# ==============================================================================
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# Docker
+# (PostgreSQL está no Azure - não há volumes locais)
+
+# Backups
+backups/
+*.sql
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.cache

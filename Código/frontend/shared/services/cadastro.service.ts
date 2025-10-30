@@ -1,6 +1,8 @@
 import type {
     AlunoRequest,
     AlunoResponse,
+    ProfessorRequest,
+    ProfessorResponse,
     EmpresaRequest,
     EmpresaResponse,
     ApiError
@@ -36,6 +38,29 @@ class CadastroService {
             });
 
             return this.handleResponse<AlunoResponse>(response);
+        } catch (error) {
+            if ((error as ApiError).status) {
+                throw error;
+            }
+
+            throw {
+                message: 'Erro de conexão com o servidor',
+                status: 0
+            } as ApiError;
+        }
+    }
+
+    async cadastrarProfessor(data: ProfessorRequest): Promise<ProfessorResponse> {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/professores/cadastro`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            return this.handleResponse<ProfessorResponse>(response);
         } catch (error) {
             if ((error as ApiError).status) {
                 throw error;
