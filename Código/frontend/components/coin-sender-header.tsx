@@ -32,9 +32,9 @@ export function CoinSenderHeader({ professorBalance, searchTerm, onSearchChange 
                 </Card>
 
                 {/* Campo de Busca */}
-                <Card className="p-6 flex items-center">
+                <section className="p-6 flex items-top">
                     <div className="relative w-full">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                        <Search className="absolute left-2 top-1/4 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                         <Input
                             type="text"
                             placeholder="Buscar por nome, email ou curso..."
@@ -43,7 +43,7 @@ export function CoinSenderHeader({ professorBalance, searchTerm, onSearchChange 
                             className="pl-10 h-12 text-base"
                         />
                     </div>
-                </Card>
+                </section>
             </div>
         </div>
     )
