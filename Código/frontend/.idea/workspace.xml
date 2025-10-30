@@ -6,6 +6,24 @@
   <component name="ChangeListManager">
     <list default="true" id="597ce73e-31a1-4ded-88c4-872b9c265b36" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/../../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/cadastro/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/cadastro/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/enviar-moedas/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/enviar-moedas/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/extrato/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/extrato/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/home/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/home/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/login/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/login/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/perfil/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/perfil/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/aluno-dashboard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/dashboards/aluno-dashboard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/coin-sender-header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/headers/coin-sender-header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/editar-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/forms/editar-form.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/empresa-dashboard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/dashboards/empresa-dashboard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/features-section.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/sections/features-section.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/headers/header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/hero-section.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/sections/hero-section.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/login-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/forms/login-form.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/professor-dashboard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/dashboards/professor-dashboard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/register-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/forms/register-form.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +60,14 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/components/sections" />
+      <recent name="$PROJECT_DIR$/components/headers" />
+      <recent name="$PROJECT_DIR$/components/forms" />
+      <recent name="$PROJECT_DIR$/components/dashboards" />
+    </key>
+  </component>
   <component name="RunManager" selected="npm.Next.js: server-side">
     <configuration name="Next.js: debug client-side" type="JavascriptDebugType" uri="http://localhost:3000/">
       <method v="2" />
@@ -80,6 +106,8 @@
       <workItem from="1761256605362" duration="159000" />
       <workItem from="1761263739478" duration="2089000" />
       <workItem from="1761607095442" duration="3953000" />
+      <workItem from="1761778688086" duration="6344000" />
+      <workItem from="1761785894151" duration="689000" />
     </task>
     <servers />
   </component>

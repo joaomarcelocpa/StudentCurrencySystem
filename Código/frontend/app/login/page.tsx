@@ -1,6 +1,6 @@
 import { Suspense } from "react"
-import { Header } from "@/components/header"
-import { LoginForm } from "@/components/login-form"
+import { Header } from "@/components/headers/header"
+import { LoginForm } from "@/components/forms/login-form"
 import { Loader2 } from "lucide-react"
 
 function LoginFormWrapper() {

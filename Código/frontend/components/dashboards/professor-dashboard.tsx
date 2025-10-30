@@ -2,7 +2,7 @@
 
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import {Coins, ArrowRight, Send, History, DollarSign, User} from "lucide-react"
+import {Coins, ArrowRight, Send, History, DollarSign, User, FileSpreadsheet} from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { loginService } from "@/shared/services/login.service"
@@ -64,7 +64,7 @@ export function ProfessorDashboard() {
                                     <div
                                         className="w-20 h-20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform bg-[#268c90]"
                                     >
-                                        <DollarSign className="w-10 h-10 text-white" />
+                                        <FileSpreadsheet className="w-10 h-10 text-white" />
                                     </div>
                                     <h3 className="font-heading font-semibold text-3xl mb-4 text-foreground">
                                         Visualizar Extrato
@@ -116,7 +116,7 @@ export function ProfessorDashboard() {
                     <Card className="p-6 bg-gradient-to-r from-[#268c90]/10 to-[#6ed3d8]/10 border-[#268c90]/20">
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 rounded-full bg-[#268c90] flex items-center justify-center">
-                                <DollarSign className="w-8 h-8 text-white" />
+                                <DollarSign className="w-16 h-8 text-white" />
                             </div>
                             <div>
                                 <h4 className="font-semibold text-lg mb-1">Como funciona?</h4>

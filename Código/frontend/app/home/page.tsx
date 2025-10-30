@@ -2,15 +2,15 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Header } from "@/components/header"
-import { HeroSection } from "@/components/hero-section"
-import { FeaturesSection } from "@/components/features-section"
+import { Header } from "@/components/headers/header"
+import { HeroSection } from "@/components/sections/hero-section"
+import { FeaturesSection } from "@/components/sections/features-section"
 import { loginService } from "@/shared/services/login.service"
 import type { UserData } from "@/shared/interfaces/login.interface"
 import { Loader2 } from "lucide-react"
-import { ProfessorDashboard } from "@/components/professor-dashboard"
-import {AlunoDashboard} from "@/components/aluno-dashboard";
-import {EmpresaDashboard} from "@/components/empresa-dashboard";
+import { ProfessorDashboard } from "@/components/dashboards/professor-dashboard"
+import {AlunoDashboard} from "@/components/dashboards/aluno-dashboard";
+import {EmpresaDashboard} from "@/components/dashboards/empresa-dashboard";
 
 export default function HomePage() {
     const router = useRouter()

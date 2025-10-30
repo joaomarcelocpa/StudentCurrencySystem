@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Header } from "@/components/header"
+import { Header } from "@/components/headers/header"
 import { ExtratoContent } from "@/components/extrato-content"
 import { loginService } from "@/shared/services/login.service"
 import type { UserData } from "@/shared/interfaces/login.interface"

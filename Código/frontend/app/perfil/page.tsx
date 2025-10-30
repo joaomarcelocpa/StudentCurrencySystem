@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Header } from "@/components/header"
-import { EditarForm } from "@/components/editar-form"
+import { Header } from "@/components/headers/header"
+import { EditarForm } from "@/components/forms/editar-form"
 import { loginService } from "@/shared/services/login.service"
 import type { UserData } from "@/shared/interfaces/login.interface"
 import { Loader2 } from "lucide-react"

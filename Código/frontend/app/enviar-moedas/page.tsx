@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { Header } from "@/components/header"
-import { CoinSenderHeader } from "@/components/coin-sender-header"
+import { Header } from "@/components/headers/header"
+import { CoinSenderHeader } from "@/components/headers/coin-sender-header"
 import { StudentList } from "@/components/student-list"
 import { TransferModal } from "@/components/transfer-modal"
 import type { Student } from "@/shared/interfaces/coin-sender.interface"
