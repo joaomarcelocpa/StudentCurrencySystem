@@ -12,6 +12,7 @@ import { Mail, Lock, Loader2, CheckCircle } from "lucide-react"
 import { loginService } from "@/shared/services/login.service"
 import type { AuthError } from "@/shared/interfaces/login.interface"
 import { useRouter, useSearchParams } from "next/navigation"
+import Image from "next/image";
 
 export function LoginForm() {
     const router = useRouter()
@@ -52,7 +53,18 @@ export function LoginForm() {
     }
 
     return (
-        <Card className="w-full max-w-md p-8 border-border">
+        <Card className="w-full max-w-md p-6 border-border">
+            <div className="flex items-center justify-center w-40 h-40 rounded-2xl mb-6 mx-auto">
+                <Image
+                    src="/logo-virtus.png"
+                    alt="Virtus Logo"
+                    width={200}
+                    height={100}
+                    className="h-40 w-auto object-contain"
+                    priority
+                />
+            </div>
+
             <div className="text-center mb-8">
                 <h2 className="font-heading font-bold text-3xl mb-2 text-foreground">Bem-vindo de volta</h2>
                 <p className="text-muted-foreground">Entre com suas credenciais para acessar sua conta</p>

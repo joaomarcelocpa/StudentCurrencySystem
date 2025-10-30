@@ -115,19 +115,19 @@ export function RegisterForm() {
     }
 
     return (
-        <Card className="w-full max-w-2xl p-8 border-border">
-            <div className="text-center mb-8">
+        <Card className="w-full max-w-6xl p-8 border-border">
+            <div className="text-center mb-6">
                 <h2 className="font-heading font-bold text-3xl mb-2 text-foreground">Criar conta</h2>
                 <p className="text-muted-foreground">Escolha o tipo de conta e preencha seus dados</p>
             </div>
 
             {error && (
-                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
                     <p className="text-red-600 text-sm">{error}</p>
                 </div>
             )}
 
-            <div className="flex gap-4 mb-8">
+            <div className="flex gap-4 mb-6">
                 <button
                     type="button"
                     onClick={() => setUserType("student")}
@@ -157,8 +157,9 @@ export function RegisterForm() {
                 </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid md:grid-cols-2 gap-5">
+            <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Campos comuns - Nome, Email e Senha em linha */}
+                <div className="grid md:grid-cols-3 gap-4">
                     <div className="space-y-2">
                         <Label htmlFor="name" className="text-foreground font-medium">
                             Nome {userType === "company" && "da Empresa"}
@@ -191,28 +192,29 @@ export function RegisterForm() {
                         />
                         {fieldErrors.email && <p className="text-red-500 text-xs mt-1">{fieldErrors.email}</p>}
                     </div>
-                </div>
 
-                <div className="space-y-2">
-                    <Label htmlFor="password" className="text-foreground font-medium">
-                        Senha
-                    </Label>
-                    <Input
-                        id="password"
-                        type="password"
-                        placeholder="Mínimo 6 caracteres"
-                        value={formData.password}
-                        onChange={(e) => updateField("password", e.target.value)}
-                        className={`h-11 ${fieldErrors.senha ? 'border-red-500' : ''}`}
-                        disabled={isLoading}
-                        required
-                    />
-                    {fieldErrors.senha && <p className="text-red-500 text-xs mt-1">{fieldErrors.senha}</p>}
+                    <div className="space-y-2">
+                        <Label htmlFor="password" className="text-foreground font-medium">
+                            Senha
+                        </Label>
+                        <Input
+                            id="password"
+                            type="password"
+                            placeholder="Mínimo 6 caracteres"
+                            value={formData.password}
+                            onChange={(e) => updateField("password", e.target.value)}
+                            className={`h-11 ${fieldErrors.senha ? 'border-red-500' : ''}`}
+                            disabled={isLoading}
+                            required
+                        />
+                        {fieldErrors.senha && <p className="text-red-500 text-xs mt-1">{fieldErrors.senha}</p>}
+                    </div>
                 </div>
 
                 {userType === "student" ? (
                     <>
-                        <div className="grid md:grid-cols-2 gap-5">
+                        {/* CPF, RG e Instituição em linha */}
+                        <div className="grid md:grid-cols-3 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="cpf" className="text-foreground font-medium">
                                     CPF
@@ -245,25 +247,7 @@ export function RegisterForm() {
                                 />
                                 {fieldErrors.rg && <p className="text-red-500 text-xs mt-1">{fieldErrors.rg}</p>}
                             </div>
-                        </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="address" className="text-foreground font-medium">
-                                Endereço
-                            </Label>
-                            <Input
-                                id="address"
-                                placeholder="Rua, número, bairro, cidade"
-                                value={formData.address}
-                                onChange={(e) => updateField("address", e.target.value)}
-                                className={`h-11 ${fieldErrors.endereco ? 'border-red-500' : ''}`}
-                                disabled={isLoading}
-                                required
-                            />
-                            {fieldErrors.endereco && <p className="text-red-500 text-xs mt-1">{fieldErrors.endereco}</p>}
-                        </div>
-
-                        <div className="grid md:grid-cols-2 gap-5">
                             <div className="space-y-2">
                                 <Label htmlFor="institution" className="text-foreground font-medium">
                                     Instituição de Ensino
@@ -286,7 +270,10 @@ export function RegisterForm() {
                                     </SelectContent>
                                 </Select>
                             </div>
+                        </div>
 
+                        {/* Curso e Endereço em linha */}
+                        <div className="grid md:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="course" className="text-foreground font-medium">
                                     Curso
@@ -301,43 +288,63 @@ export function RegisterForm() {
                                     required
                                 />
                             </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="address" className="text-foreground font-medium">
+                                    Endereço
+                                </Label>
+                                <Input
+                                    id="address"
+                                    placeholder="Rua, número, bairro, cidade"
+                                    value={formData.address}
+                                    onChange={(e) => updateField("address", e.target.value)}
+                                    className={`h-11 ${fieldErrors.endereco ? 'border-red-500' : ''}`}
+                                    disabled={isLoading}
+                                    required
+                                />
+                                {fieldErrors.endereco && <p className="text-red-500 text-xs mt-1">{fieldErrors.endereco}</p>}
+                            </div>
                         </div>
                     </>
                 ) : (
                     <>
-                        <div className="space-y-2">
-                            <Label htmlFor="cnpj" className="text-foreground font-medium">
-                                CNPJ
-                            </Label>
-                            <Input
-                                id="cnpj"
-                                placeholder="00.000.000/0000-00"
-                                value={formData.cnpj}
-                                onChange={(e) => updateField("cnpj", e.target.value)}
-                                className={`h-11 ${fieldErrors.cnpj ? 'border-red-500' : ''}`}
-                                disabled={isLoading}
-                                maxLength={18}
-                                required
-                            />
-                            {fieldErrors.cnpj && <p className="text-red-500 text-xs mt-1">{fieldErrors.cnpj}</p>}
+                        {/* CNPJ e Endereço em linha */}
+                        <div className="grid md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="cnpj" className="text-foreground font-medium">
+                                    CNPJ
+                                </Label>
+                                <Input
+                                    id="cnpj"
+                                    placeholder="00.000.000/0000-00"
+                                    value={formData.cnpj}
+                                    onChange={(e) => updateField("cnpj", e.target.value)}
+                                    className={`h-11 ${fieldErrors.cnpj ? 'border-red-500' : ''}`}
+                                    disabled={isLoading}
+                                    maxLength={18}
+                                    required
+                                />
+                                {fieldErrors.cnpj && <p className="text-red-500 text-xs mt-1">{fieldErrors.cnpj}</p>}
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="address" className="text-foreground font-medium">
+                                    Endereço
+                                </Label>
+                                <Input
+                                    id="address"
+                                    placeholder="Rua, número, bairro, cidade"
+                                    value={formData.address}
+                                    onChange={(e) => updateField("address", e.target.value)}
+                                    className={`h-11 ${fieldErrors.endereco ? 'border-red-500' : ''}`}
+                                    disabled={isLoading}
+                                    required
+                                />
+                                {fieldErrors.endereco && <p className="text-red-500 text-xs mt-1">{fieldErrors.endereco}</p>}
+                            </div>
                         </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="address" className="text-foreground font-medium">
-                                Endereço
-                            </Label>
-                            <Input
-                                id="address"
-                                placeholder="Rua, número, bairro, cidade"
-                                value={formData.address}
-                                onChange={(e) => updateField("address", e.target.value)}
-                                className={`h-11 ${fieldErrors.endereco ? 'border-red-500' : ''}`}
-                                disabled={isLoading}
-                                required
-                            />
-                            {fieldErrors.endereco && <p className="text-red-500 text-xs mt-1">{fieldErrors.endereco}</p>}
-                        </div>
-
+                        {/* Descrição */}
                         <div className="space-y-2">
                             <Label htmlFor="description" className="text-foreground font-medium">
                                 Descrição da Empresa (opcional)
@@ -347,7 +354,7 @@ export function RegisterForm() {
                                 placeholder="Conte um pouco sobre sua empresa..."
                                 value={formData.description}
                                 onChange={(e) => updateField("description", e.target.value)}
-                                className="min-h-24 resize-none"
+                                className="min-h-20 resize-none"
                                 disabled={isLoading}
                             />
                         </div>
@@ -357,7 +364,7 @@ export function RegisterForm() {
                 <Button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full h-12 bg-[#268c90] hover:bg-[#155457] text-white font-medium text-base mt-6"
+                    className="w-full h-12 bg-[#268c90] hover:bg-[#155457] text-white font-medium text-base mt-4"
                 >
                     {isLoading ? (
                         <>

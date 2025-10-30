@@ -164,27 +164,27 @@ export function EditarForm({ userData }: EditarFormProps) {
     }
 
     return (
-        <Card className="w-full max-w-2xl p-8 border-border">
-            <div className="text-center mb-8">
-                <div className="w-16 h-16 rounded-2xl bg-[#268c90]/10 flex items-center justify-center mx-auto mb-4">
+        <Card className="w-full max-w-6xl p-8 border-border">
+            <div className="text-center mb-6">
+                <div className="w-16 h-16 rounded-2xl bg-[#268c90]/10 flex items-center justify-center mx-auto mb-3">
                     {getUserTypeIcon()}
                 </div>
                 <h2 className="font-heading font-bold text-3xl mb-2 text-foreground">Editar Perfil</h2>
                 <p className="text-muted-foreground">Atualize suas informações pessoais</p>
-                <div className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-[#268c90]/10 rounded-lg">
+                <div className="mt-2 inline-flex items-center gap-2 px-4 py-1.5 bg-[#268c90]/10 rounded-lg">
                     <span className="text-sm font-medium text-[#268c90]">Tipo de conta: {getUserTypeLabel()}</span>
                 </div>
             </div>
 
             {error && (
-                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
                     <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
                     <p className="text-red-600 text-sm">{error}</p>
                 </div>
             )}
 
             {success && (
-                <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3">
+                <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                     <div>
                         <p className="text-green-800 text-sm font-medium">Perfil atualizado com sucesso!</p>
@@ -193,45 +193,47 @@ export function EditarForm({ userData }: EditarFormProps) {
                 </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Campos comuns para todos os tipos */}
-                <div className="space-y-2">
-                    <Label htmlFor="name" className="text-foreground font-medium">
-                        Nome {userData.tipo === 'EMPRESA' && 'da Empresa'}
-                    </Label>
-                    <Input
-                        id="name"
-                        placeholder={userData.tipo === 'ALUNO' || userData.tipo === 'PROFESSOR' ? "Seu nome completo" : "Nome da empresa"}
-                        value={formData.name}
-                        onChange={(e) => updateField("name", e.target.value)}
-                        className={`h-11 ${fieldErrors.name ? 'border-red-500' : ''}`}
-                        disabled={isLoading}
-                        required
-                    />
-                    {fieldErrors.name && <p className="text-red-500 text-xs mt-1">{fieldErrors.name}</p>}
-                </div>
+                <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="name" className="text-foreground font-medium">
+                            Nome {userData.tipo === 'EMPRESA' && 'da Empresa'}
+                        </Label>
+                        <Input
+                            id="name"
+                            placeholder={userData.tipo === 'ALUNO' || userData.tipo === 'PROFESSOR' ? "Seu nome completo" : "Nome da empresa"}
+                            value={formData.name}
+                            onChange={(e) => updateField("name", e.target.value)}
+                            className={`h-11 ${fieldErrors.name ? 'border-red-500' : ''}`}
+                            disabled={isLoading}
+                            required
+                        />
+                        {fieldErrors.name && <p className="text-red-500 text-xs mt-1">{fieldErrors.name}</p>}
+                    </div>
 
-                <div className="space-y-2">
-                    <Label htmlFor="email" className="text-foreground font-medium">
-                        Email
-                    </Label>
-                    <Input
-                        id="email"
-                        type="email"
-                        placeholder="seu@email.com"
-                        value={formData.email}
-                        onChange={(e) => updateField("email", e.target.value)}
-                        className={`h-11 ${fieldErrors.email ? 'border-red-500' : ''}`}
-                        disabled={isLoading}
-                        required
-                    />
-                    {fieldErrors.email && <p className="text-red-500 text-xs mt-1">{fieldErrors.email}</p>}
+                    <div className="space-y-2">
+                        <Label htmlFor="email" className="text-foreground font-medium">
+                            Email
+                        </Label>
+                        <Input
+                            id="email"
+                            type="email"
+                            placeholder="seu@email.com"
+                            value={formData.email}
+                            onChange={(e) => updateField("email", e.target.value)}
+                            className={`h-11 ${fieldErrors.email ? 'border-red-500' : ''}`}
+                            disabled={isLoading}
+                            required
+                        />
+                        {fieldErrors.email && <p className="text-red-500 text-xs mt-1">{fieldErrors.email}</p>}
+                    </div>
                 </div>
 
                 {/* Campos específicos para ALUNO */}
                 {userData.tipo === 'ALUNO' && 'cpf' in formData && 'rg' in formData && (
                     <>
-                        <div className="grid md:grid-cols-2 gap-5">
+                        <div className="grid md:grid-cols-3 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="cpf" className="text-foreground font-medium">
                                     CPF
@@ -263,25 +265,7 @@ export function EditarForm({ userData }: EditarFormProps) {
                                 />
                                 {fieldErrors.rg && <p className="text-red-500 text-xs mt-1">{fieldErrors.rg}</p>}
                             </div>
-                        </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="address" className="text-foreground font-medium">
-                                Endereço
-                            </Label>
-                            <Input
-                                id="address"
-                                placeholder="Rua, número, bairro, cidade"
-                                value={formData.address}
-                                onChange={(e) => updateField("address", e.target.value)}
-                                className={`h-11 ${fieldErrors.address ? 'border-red-500' : ''}`}
-                                disabled={isLoading}
-                                required
-                            />
-                            {fieldErrors.address && <p className="text-red-500 text-xs mt-1">{fieldErrors.address}</p>}
-                        </div>
-
-                        <div className="grid md:grid-cols-2 gap-5">
                             <div className="space-y-2">
                                 <Label htmlFor="institution" className="text-foreground font-medium">
                                     Instituição de Ensino
@@ -304,7 +288,9 @@ export function EditarForm({ userData }: EditarFormProps) {
                                     </SelectContent>
                                 </Select>
                             </div>
+                        </div>
 
+                        <div className="grid md:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="course" className="text-foreground font-medium">
                                     Curso
@@ -319,6 +305,22 @@ export function EditarForm({ userData }: EditarFormProps) {
                                     required
                                 />
                             </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="address" className="text-foreground font-medium">
+                                    Endereço
+                                </Label>
+                                <Input
+                                    id="address"
+                                    placeholder="Rua, número, bairro, cidade"
+                                    value={formData.address}
+                                    onChange={(e) => updateField("address", e.target.value)}
+                                    className={`h-11 ${fieldErrors.address ? 'border-red-500' : ''}`}
+                                    disabled={isLoading}
+                                    required
+                                />
+                                {fieldErrors.address && <p className="text-red-500 text-xs mt-1">{fieldErrors.address}</p>}
+                            </div>
                         </div>
                     </>
                 )}
@@ -326,59 +328,61 @@ export function EditarForm({ userData }: EditarFormProps) {
                 {/* Campos específicos para PROFESSOR */}
                 {userData.tipo === 'PROFESSOR' && 'cpf' in formData && 'department' in formData && (
                     <>
-                        <div className="space-y-2">
-                            <Label htmlFor="cpf" className="text-foreground font-medium">
-                                CPF
-                            </Label>
-                            <Input
-                                id="cpf"
-                                placeholder="000.000.000-00"
-                                value={formData.cpf}
-                                onChange={(e) => updateField("cpf", e.target.value)}
-                                className="h-11 bg-muted"
-                                disabled={true}
-                                maxLength={14}
-                            />
-                            <p className="text-xs text-muted-foreground">Campo não editável</p>
-                        </div>
+                        <div className="grid md:grid-cols-3 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="cpf" className="text-foreground font-medium">
+                                    CPF
+                                </Label>
+                                <Input
+                                    id="cpf"
+                                    placeholder="000.000.000-00"
+                                    value={formData.cpf}
+                                    onChange={(e) => updateField("cpf", e.target.value)}
+                                    className="h-11 bg-muted"
+                                    disabled={true}
+                                    maxLength={14}
+                                />
+                                <p className="text-xs text-muted-foreground">Campo não editável</p>
+                            </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="department" className="text-foreground font-medium">
-                                Departamento
-                            </Label>
-                            <Input
-                                id="department"
-                                placeholder="Ex: Departamento de Ciência da Computação"
-                                value={formData.department}
-                                onChange={(e) => updateField("department", e.target.value)}
-                                className={`h-11 ${fieldErrors.department ? 'border-red-500' : ''}`}
-                                disabled={isLoading}
-                                required
-                            />
-                            {fieldErrors.department && <p className="text-red-500 text-xs mt-1">{fieldErrors.department}</p>}
-                        </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="department" className="text-foreground font-medium">
+                                    Departamento
+                                </Label>
+                                <Input
+                                    id="department"
+                                    placeholder="Ex: Departamento de Ciência da Computação"
+                                    value={formData.department}
+                                    onChange={(e) => updateField("department", e.target.value)}
+                                    className={`h-11 ${fieldErrors.department ? 'border-red-500' : ''}`}
+                                    disabled={isLoading}
+                                    required
+                                />
+                                {fieldErrors.department && <p className="text-red-500 text-xs mt-1">{fieldErrors.department}</p>}
+                            </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="institution" className="text-foreground font-medium">
-                                Instituição de Ensino
-                            </Label>
-                            <Select
-                                value={formData.institution}
-                                onValueChange={(value) => updateField("institution", value)}
-                                disabled={isLoading}
-                                required
-                            >
-                                <SelectTrigger className="h-11">
-                                    <SelectValue placeholder="Selecione" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="ufmg">UFMG</SelectItem>
-                                    <SelectItem value="usp">USP</SelectItem>
-                                    <SelectItem value="unicamp">UNICAMP</SelectItem>
-                                    <SelectItem value="ufrj">UFRJ</SelectItem>
-                                    <SelectItem value="puc">PUC</SelectItem>
-                                </SelectContent>
-                            </Select>
+                            <div className="space-y-2">
+                                <Label htmlFor="institution" className="text-foreground font-medium">
+                                    Instituição de Ensino
+                                </Label>
+                                <Select
+                                    value={formData.institution}
+                                    onValueChange={(value) => updateField("institution", value)}
+                                    disabled={isLoading}
+                                    required
+                                >
+                                    <SelectTrigger className="h-11">
+                                        <SelectValue placeholder="Selecione" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="ufmg">UFMG</SelectItem>
+                                        <SelectItem value="usp">USP</SelectItem>
+                                        <SelectItem value="unicamp">UNICAMP</SelectItem>
+                                        <SelectItem value="ufrj">UFRJ</SelectItem>
+                                        <SelectItem value="puc">PUC</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
                         </div>
                     </>
                 )}
@@ -386,36 +390,38 @@ export function EditarForm({ userData }: EditarFormProps) {
                 {/* Campos específicos para EMPRESA */}
                 {userData.tipo === 'EMPRESA' && 'cnpj' in formData && 'description' in formData && (
                     <>
-                        <div className="space-y-2">
-                            <Label htmlFor="cnpj" className="text-foreground font-medium">
-                                CNPJ
-                            </Label>
-                            <Input
-                                id="cnpj"
-                                placeholder="00.000.000/0000-00"
-                                value={formData.cnpj}
-                                onChange={(e) => updateField("cnpj", e.target.value)}
-                                className="h-11 bg-muted"
-                                disabled={true}
-                                maxLength={18}
-                            />
-                            <p className="text-xs text-muted-foreground">Campo não editável</p>
-                        </div>
+                        <div className="grid md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="cnpj" className="text-foreground font-medium">
+                                    CNPJ
+                                </Label>
+                                <Input
+                                    id="cnpj"
+                                    placeholder="00.000.000/0000-00"
+                                    value={formData.cnpj}
+                                    onChange={(e) => updateField("cnpj", e.target.value)}
+                                    className="h-11 bg-muted"
+                                    disabled={true}
+                                    maxLength={18}
+                                />
+                                <p className="text-xs text-muted-foreground">Campo não editável</p>
+                            </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="address" className="text-foreground font-medium">
-                                Endereço
-                            </Label>
-                            <Input
-                                id="address"
-                                placeholder="Rua, número, bairro, cidade"
-                                value={formData.address}
-                                onChange={(e) => updateField("address", e.target.value)}
-                                className={`h-11 ${fieldErrors.address ? 'border-red-500' : ''}`}
-                                disabled={isLoading}
-                                required
-                            />
-                            {fieldErrors.address && <p className="text-red-500 text-xs mt-1">{fieldErrors.address}</p>}
+                            <div className="space-y-2">
+                                <Label htmlFor="address" className="text-foreground font-medium">
+                                    Endereço
+                                </Label>
+                                <Input
+                                    id="address"
+                                    placeholder="Rua, número, bairro, cidade"
+                                    value={formData.address}
+                                    onChange={(e) => updateField("address", e.target.value)}
+                                    className={`h-11 ${fieldErrors.address ? 'border-red-500' : ''}`}
+                                    disabled={isLoading}
+                                    required
+                                />
+                                {fieldErrors.address && <p className="text-red-500 text-xs mt-1">{fieldErrors.address}</p>}
+                            </div>
                         </div>
 
                         <div className="space-y-2">
@@ -427,7 +433,7 @@ export function EditarForm({ userData }: EditarFormProps) {
                                 placeholder="Conte um pouco sobre sua empresa..."
                                 value={formData.description}
                                 onChange={(e) => updateField("description", e.target.value)}
-                                className="min-h-24 resize-none"
+                                className="min-h-20 resize-none"
                                 disabled={isLoading}
                             />
                         </div>
@@ -435,8 +441,8 @@ export function EditarForm({ userData }: EditarFormProps) {
                 )}
 
                 {/* Seção de alteração de senha */}
-                <div className="pt-6 border-t border-border">
-                    <div className="flex items-center justify-between mb-4">
+                <div className="pt-4 border-t border-border">
+                    <div className="flex items-center justify-between mb-3">
                         <h3 className="text-lg font-semibold text-foreground">Alterar Senha</h3>
                         <Button
                             type="button"
@@ -450,7 +456,7 @@ export function EditarForm({ userData }: EditarFormProps) {
                     </div>
 
                     {isChangingPassword && (
-                        <div className="space-y-4 mt-4 p-4 bg-muted/50 rounded-lg">
+                        <div className="grid md:grid-cols-3 gap-4 p-4 bg-muted/50 rounded-lg">
                             <div className="space-y-2">
                                 <Label htmlFor="currentPassword" className="text-foreground font-medium">
                                     Senha Atual *
@@ -502,7 +508,7 @@ export function EditarForm({ userData }: EditarFormProps) {
                     )}
                 </div>
 
-                <div className="flex gap-4 pt-4">
+                <div className="flex gap-4 pt-3">
                     <Button
                         type="button"
                         variant="outline"
