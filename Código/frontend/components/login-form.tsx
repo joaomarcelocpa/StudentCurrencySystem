@@ -84,10 +84,10 @@ export function LoginForm() {
                         <Input
                             id="email"
                             type="email"
-                            placeholder=""
+                            placeholder="Entre com o seu email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="pl-10 h-12"
+                            className="pl-10 h-12 text-black placeholder:text-gray-500"
                             disabled={isLoading}
                             required
                         />
@@ -103,10 +103,10 @@ export function LoginForm() {
                         <Input
                             id="password"
                             type="password"
-                            placeholder=""
+                            placeholder="Entre a sua senha"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="pl-10 h-12 "
+                            className="pl-10 h-12 text-black placeholder:text-gray-500"
                             disabled={isLoading}
                             required
                         />

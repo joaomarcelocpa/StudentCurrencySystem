@@ -99,20 +99,15 @@ export default function CoinSenderPage() {
 
     const handleTransfer = (amount: number, description: string) => {
         if (selectedStudent && amount <= professorBalance) {
-            // Aqui virá a lógica de transferência com a API
             console.log("Transferindo:", {
                 studentId: selectedStudent.id,
                 amount,
                 description
             })
 
-            // Atualizar saldo (mock)
             setProfessorBalance(prev => prev - amount)
             setIsModalOpen(false)
             setSelectedStudent(null)
-
-            // TODO: Mostrar toast de sucesso
-            alert(`${amount} moedas enviadas para ${selectedStudent.nome} com sucesso!`)
         }
     }
 
