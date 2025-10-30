@@ -11,11 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProfessorUpdateRequest {
 
-    @NotBlank(message = "Nome é obrigatório")
     @Size(max = 200, message = "Nome deve ter no máximo 200 caracteres")
     private String nome;
 
-    @NotBlank(message = "Departamento é obrigatório")
     @Size(max = 200, message = "Departamento deve ter no máximo 200 caracteres")
     private String departamento;
+
+    @Size(min = 6, message = "Senha deve ter no mínimo 6 caracteres")
+    private String senha;
 }

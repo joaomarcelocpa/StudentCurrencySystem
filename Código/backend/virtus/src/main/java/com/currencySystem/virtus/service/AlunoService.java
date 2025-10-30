@@ -133,10 +133,22 @@ public class AlunoService {
     public AlunoResponse atualizar(Long id, AlunoUpdateRequest request) {
         Aluno aluno = buscarPorId(id);
 
-        aluno.setNome(request.getNome());
-        aluno.setEmail(request.getEmail());
-        aluno.setEndereco(request.getEndereco());
-        aluno.setRg(request.getRg());
+        if (request.getNome() != null) {
+            aluno.setNome(request.getNome());
+        }
+        if (request.getEmail() != null) {
+            aluno.setEmail(request.getEmail());
+        }
+        if (request.getEndereco() != null) {
+            aluno.setEndereco(request.getEndereco());
+        }
+        if (request.getRg() != null) {
+            aluno.setRg(request.getRg());
+        }
+
+        if (request.getSenha() != null) {
+            aluno.setSenha(passwordEncoder.encode(request.getSenha()));
+        }
 
         Aluno updated = alunoRepository.save(aluno);
         return AlunoResponse.fromEntity(updated);

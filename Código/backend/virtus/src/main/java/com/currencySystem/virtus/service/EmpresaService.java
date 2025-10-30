@@ -72,9 +72,19 @@ public class EmpresaService {
     public EmpresaResponse atualizar(Long id, EmpresaUpdateRequest request) {
         Empresa empresa = buscarPorId(id);
 
-        empresa.setNome(request.getNome());
-        empresa.setEndereco(request.getEndereco());
-        empresa.setEmail(request.getEmail());
+        // Atualiza apenas os campos que foram enviados (não nulos)
+        if (request.getNome() != null) {
+            empresa.setNome(request.getNome());
+        }
+        if (request.getEndereco() != null) {
+            empresa.setEndereco(request.getEndereco());
+        }
+        if (request.getEmail() != null) {
+            empresa.setEmail(request.getEmail());
+        }
+        if (request.getSenha() != null) {
+            empresa.setSenha(passwordEncoder.encode(request.getSenha()));
+        }
 
         Empresa updated = empresaRepository.save(empresa);
         return EmpresaResponse.fromEntity(updated);
@@ -114,11 +124,22 @@ public class EmpresaService {
             throw new IllegalStateException("Esta vantagem não pertence a esta empresa");
         }
 
-        vantagem.setNome(request.getNome());
-        vantagem.setDescricao(request.getDescricao());
-        vantagem.setCustoMoedas(request.getCustoMoedas());
-        vantagem.setUrlFoto(request.getUrlFoto());
-        vantagem.setAtiva(request.getAtiva());
+        // Atualiza apenas os campos que foram enviados (não nulos)
+        if (request.getNome() != null) {
+            vantagem.setNome(request.getNome());
+        }
+        if (request.getDescricao() != null) {
+            vantagem.setDescricao(request.getDescricao());
+        }
+        if (request.getCustoMoedas() != null) {
+            vantagem.setCustoMoedas(request.getCustoMoedas());
+        }
+        if (request.getUrlFoto() != null) {
+            vantagem.setUrlFoto(request.getUrlFoto());
+        }
+        if (request.getAtiva() != null) {
+            vantagem.setAtiva(request.getAtiva());
+        }
 
         Vantagem updated = vantagemRepository.save(vantagem);
         return VantagemResponse.fromEntity(updated);

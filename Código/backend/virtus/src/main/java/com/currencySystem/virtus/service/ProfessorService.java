@@ -123,8 +123,16 @@ public class ProfessorService {
     public ProfessorResponse atualizar(Long id, ProfessorUpdateRequest request) {
         Professor professor = buscarPorId(id);
 
-        professor.setNome(request.getNome());
-        professor.setDepartamento(request.getDepartamento());
+        // Atualiza apenas os campos que foram enviados (não nulos)
+        if (request.getNome() != null) {
+            professor.setNome(request.getNome());
+        }
+        if (request.getDepartamento() != null) {
+            professor.setDepartamento(request.getDepartamento());
+        }
+        if (request.getSenha() != null) {
+            professor.setSenha(passwordEncoder.encode(request.getSenha()));
+        }
 
         Professor updated = professorRepository.save(professor);
         return ProfessorResponse.fromEntity(updated);
